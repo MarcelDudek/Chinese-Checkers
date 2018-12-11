@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="14.2">
+  <zoom_level>10</zoom_level>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>320</x>
+      <y>30</y>
+      <w>210</w>
+      <h>190</h>
+    </coordinates>
+    <panel_attributes>Gracz
+--
+Imie
+Nazwisko
+KolorPionów
+--
+połaczZserwerem();
+opuscGrę();
+WykonajRuch();
+KomunikacjaChatu();
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>30</x>
+      <y>30</y>
+      <w>210</w>
+      <h>190</h>
+    </coordinates>
+    <panel_attributes>Serwer
+--
+Nazwa
+IloscGraczy
+ImionaGraczy
+--
+przyjmijGracza();
+obsugaKomunikacji();
+tworzeniePlanszy();
+obsluga/asercjaRuchow();
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>170</x>
+      <y>310</y>
+      <w>210</w>
+      <h>190</h>
+    </coordinates>
+    <panel_attributes>Plansza
+{jako klasa wewnetrzna Serwera}
+--
+kolorPionów
+iloscGraczy
+WspółrzedneX
+WspółrzedneY
+(AtrybutySwing)
+--
+przesyłajDaneSerwerowi();
+OdswieżPlanszę();
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+</diagram>
