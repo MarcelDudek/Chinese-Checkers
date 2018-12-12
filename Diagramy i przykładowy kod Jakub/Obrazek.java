@@ -42,12 +42,32 @@ public class Obrazek extends JPanel  implements MouseListener,  MouseMotionListe
 		setPreferredSize(dimension);
 	}
 
+	public void Ustaw_pionki()//przemysl w ktorym miejscu wywolac metode, raczej nie paint comoponent
+	{
+		int ptkX;
+		int ptkY;
+		
+		ptkX=198;
+		ptkY=177;
+		
+		for(int i = 0; i<5; i++)
+		{
+			punkty.add(new Point(ptkX,ptkY));
+			ptkX=ptkX+40;
+			
+		}
+		
+		
+	}
+	
+	
+	
 	//@Override
 	public void paintComponent(Graphics g) {
 		Graphics2D g2d = (Graphics2D) g;
 		g2d.drawImage(image, 0, 0, this); 
-		 
-		
+		Ustaw_pionki();
+		repaint();
 		g2d.setColor(Color.BLACK);
 		drawRectangles(g2d);
 	
@@ -157,7 +177,7 @@ public class Obrazek extends JPanel  implements MouseListener,  MouseMotionListe
 					for (Point p : punkty) {
 						x2 = (int) p.getX();
 						y2 = (int) p.getY();
-						if (x >= x2 && y >= y2 && x <= x2 + 20 && y <= y2 + 20)
+						if (x >= x2 && y >= y2 && x <= x2 + 25 && y <= y2 + 25)
 						{
 							toRemove = p;
 							 
@@ -179,7 +199,7 @@ public class Obrazek extends JPanel  implements MouseListener,  MouseMotionListe
 						p = punkty.get(index);
 						x2 = (int) p.getX();
 						y2 = (int) p.getY();
-						if (x >= x2 && y >= y2 && x <= x2 + 20 && y <= y2 + 20)
+						if (x >= x2 && y >= y2 && x <= x2 + 25 && y <= y2 + 25)
 							movingPoint = p;
 						index++;
 						 
@@ -221,7 +241,7 @@ public class Obrazek extends JPanel  implements MouseListener,  MouseMotionListe
 		for (Point p : punkty) {
 			x1 = (int) p.getX();
 			y1 = (int) p.getY();
-			g3d.fillRect(x1, y1, 20, 20);
+			g3d.fillOval(x1, y1, 25, 25);
 		}
 	}
 }
