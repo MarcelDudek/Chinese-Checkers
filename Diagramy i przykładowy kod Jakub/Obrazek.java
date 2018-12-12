@@ -2,8 +2,6 @@ package chinskie.warcaby;
 
 import java.awt.*;
 import java.awt.event.*;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -13,10 +11,17 @@ import java.awt.EventQueue;
 import java.awt.geom.GeneralPath;
 
 import javax.imageio.ImageIO;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 
 public class Obrazek extends JPanel  implements MouseListener,  MouseMotionListener
 {
+ 
+	 
+	
+	
 	Point toRemove = null;
 	Point movingPoint = null;
 	ArrayList<Point> punkty = new ArrayList<Point>();
@@ -26,6 +31,8 @@ public class Obrazek extends JPanel  implements MouseListener,  MouseMotionListe
 	public Obrazek() {
 		super();
 
+		
+ 
 		addMouseListener(this);
 		addMouseMotionListener(this);
 		setPreferredSize(new Dimension(300, 400));
@@ -40,11 +47,13 @@ public class Obrazek extends JPanel  implements MouseListener,  MouseMotionListe
 
 		Dimension dimension = new Dimension(image.getWidth(), image.getHeight());
 		setPreferredSize(dimension);
+		Ustaw_pionki();
 	}
 
 	public void Ustaw_pionki()//przemysl w ktorym miejscu wywolac metode, raczej nie paint comoponent
 	{
-		int ptkX;
+		int ptkX;//doodamy przycisk w gui pt"rozmiesc pionki"
+		//bedzie zapisywal punkty ale tylko raz i bedzie mozna je usuwac, usun met z mouse clicked
 		int ptkY;
 		
 		ptkX=198;
@@ -66,8 +75,7 @@ public class Obrazek extends JPanel  implements MouseListener,  MouseMotionListe
 	public void paintComponent(Graphics g) {
 		Graphics2D g2d = (Graphics2D) g;
 		g2d.drawImage(image, 0, 0, this); 
-		Ustaw_pionki();
-		repaint();
+	 
 		g2d.setColor(Color.BLACK);
 		drawRectangles(g2d);
 	
@@ -77,7 +85,9 @@ public class Obrazek extends JPanel  implements MouseListener,  MouseMotionListe
 	//ponizej metody interfejsu ktore trzeba nadpisac
 	public void mouseClicked(MouseEvent e)
 	{
-	;
+		//Ustaw_pionki();
+		repaint();
+	
 		/*int x,y;
 	 
 		
@@ -244,4 +254,9 @@ public class Obrazek extends JPanel  implements MouseListener,  MouseMotionListe
 			g3d.fillOval(x1, y1, 25, 25);
 		}
 	}
+	
+	
+ 
+	
+	
 }
