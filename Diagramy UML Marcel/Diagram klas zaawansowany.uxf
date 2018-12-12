@@ -76,6 +76,7 @@
 -pionek: List&lt;Pionek&gt;
 --
 +Zawodnik(String nazwa)
++DodajPionek(int pozycjaX, int pozycjaY)
 +PrzesunPionek(int stareX, int stareY, int noweX, int noweY)
 +UstawPozycje(int pozycja)
 +PodajPozycje(): Int
@@ -129,21 +130,6 @@
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>910</x>
-      <y>585</y>
-      <w>105</w>
-      <h>95</h>
-    </coordinates>
-    <panel_attributes>&lt;&lt;interface&gt;&gt;
-DzialaniePionka
---
-+PrzesunPionek(int X, int Y)
-</panel_attributes>
-    <additional_attributes/>
-  </element>
-  <element>
-    <id>UMLClass</id>
-    <coordinates>
       <x>760</x>
       <y>585</y>
       <w>105</w>
@@ -157,17 +143,6 @@ DzialaniePionka
 
 </panel_attributes>
     <additional_attributes/>
-  </element>
-  <element>
-    <id>Relation</id>
-    <coordinates>
-      <x>860</x>
-      <y>630</y>
-      <w>60</w>
-      <h>15</h>
-    </coordinates>
-    <panel_attributes>lt=&lt;&lt;.</panel_attributes>
-    <additional_attributes>100.0;10.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>UMLClass</id>
