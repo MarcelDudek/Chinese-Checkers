@@ -17,7 +17,7 @@ import javax.swing.JPanel;
 
 public class Obrazek extends JPanel  implements MouseListener,  MouseMotionListener
 {
-
+	Point toRemove = null;
 	Point movingPoint = null;
 	ArrayList<Point> punkty = new ArrayList<Point>();
 	
@@ -127,33 +127,51 @@ public class Obrazek extends JPanel  implements MouseListener,  MouseMotionListe
 	{
 		
 		
-		int x,y;
+	 
 	 
 		
+		int x=0;// = e.getX();
+		int y=0;// = e.getY();
 		x = e.getX();
 		y = e.getY();
-		punkty.add(new Point(x, y));
+		//punkty.add(new Point(x, y));
 		System.out.println( punkty);
 	 
 		
 		// wspó³rzêdne kwadracików
 				int x2, y2;
-
+				
+				 if (movingPoint==null && e.getButton() == MouseEvent.BUTTON1) {
+					//x = e.getX();
+					//y = e.getY();
+					// dodajemy kwadracik
+					punkty.add(new Point(x, y));
+					 
+				}
+				 
+				
 				// czy chcemy dodaæ, usun¹æ, lub przesun¹æ
 				if (e.getButton() == MouseEvent.BUTTON3) {
-					Point toRemove = null;
+					 
+					//Point toRemove = null;
 					for (Point p : punkty) {
 						x2 = (int) p.getX();
 						y2 = (int) p.getY();
 						if (x >= x2 && y >= y2 && x <= x2 + 20 && y <= y2 + 20)
+						{
 							toRemove = p;
+							 
+						}
 					}
-					// usuwamy kwadracik
 					punkty.remove(toRemove);
-		
+					// usuwamy kwadracik
+					//punkty.remove(toRemove);
+					repaint();
 				}
 				
 				else if (e.getButton() != MouseEvent.BUTTON3) {
+				//	x = e.getX();
+				//	y = e.getY();
 					int index = 0;
 					int size = punkty.size();
 					Point p;
@@ -164,18 +182,12 @@ public class Obrazek extends JPanel  implements MouseListener,  MouseMotionListe
 						if (x >= x2 && y >= y2 && x <= x2 + 20 && y <= y2 + 20)
 							movingPoint = p;
 						index++;
+						 
 					}
 				}
 				
 				
-				
-				if (movingPoint==null && e.getButton() == MouseEvent.BUTTON1) {
-					x = e.getX();
-					y = e.getY();
-					// dodajemy kwadracik
-					punkty.add(new Point(x, y));
-				}
-				
+			 
 				
 				
 				repaint();
@@ -185,6 +197,8 @@ public class Obrazek extends JPanel  implements MouseListener,  MouseMotionListe
 	public void mouseReleased(MouseEvent e)
 	{
 		 movingPoint = null;
+		  
+	 
 	}
  
 	
@@ -207,7 +221,7 @@ public class Obrazek extends JPanel  implements MouseListener,  MouseMotionListe
 		for (Point p : punkty) {
 			x1 = (int) p.getX();
 			y1 = (int) p.getY();
-			g3d.fillOval(x1, y1, 20, 20);
+			g3d.fillRect(x1, y1, 20, 20);
 		}
 	}
 }
