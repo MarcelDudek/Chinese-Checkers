@@ -24,6 +24,15 @@ public class Pionek {
   }
   
   /**
+   * Konstruktor.
+   * @param pionek Pionek, który zostanie skopiowany
+   */
+  public Pionek(final Pionek pionek) {
+    this.pozX = pionek.podajX();
+    this.pozY = pionek.podajY();
+  }
+  
+  /**
    * Zmienia po³o¿enie pionka.
    * @param pozycjaX
    * @param pozycjaY
