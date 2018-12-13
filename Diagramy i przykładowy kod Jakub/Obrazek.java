@@ -20,12 +20,18 @@ public class Obrazek extends JPanel  implements MouseListener,  MouseMotionListe
 {
  
 	 
-	
+	int Xruchu;
+	int Yruchu;
+	int Xpoprzednie;
+	int Ypoprzednie;
+	int Xsrodek;
+	int Ysrodek;
 	
 	Point toRemove = null;
 	Point movingPoint = null;
 	ArrayList<Point> punkty = new ArrayList<Point>();
-	ArrayList<Point> pozaPlansze = new ArrayList<Point>();
+	ArrayList<Point> MozliweRuchy = new ArrayList<Point>();
+	ArrayList<Point> PoprzednieUstawienie = new ArrayList<Point>();
 	
 	boolean kolor,kolor2,kolor3,kolor4,kolor5,kolor6;//numery odpowiadaja voidom do rys pionkow
 	//sa to flagi logiczne odpowiedzialne za zmiane koloru pionkow
@@ -528,7 +534,7 @@ public class Obrazek extends JPanel  implements MouseListener,  MouseMotionListe
 					//x = e.getX();
 					//y = e.getY();
 					// dodajemy kwadracik
-					punkty.add(new Point(x, y));
+//					punkty.add(new Point(x, y));
 					 
 				}
 				 
@@ -559,6 +565,9 @@ public class Obrazek extends JPanel  implements MouseListener,  MouseMotionListe
 				else if (e.getButton() != MouseEvent.BUTTON3) {
 				//	x = e.getX();
 				//	y = e.getY();
+					Xpoprzednie=e.getX();
+					Ypoprzednie=e.getY();
+				 
 					int index = 0;
 					int size = punkty.size();
 					Point p;
@@ -566,6 +575,9 @@ public class Obrazek extends JPanel  implements MouseListener,  MouseMotionListe
 						p = punkty.get(index);
 						x2 = (int) p.getX();
 						y2 = (int) p.getY();
+						  Xsrodek = e.getX() - x2;
+						  Ysrodek = e.getY() - y2;
+						
 						if (x >= x2 && y >= y2 && x <= x2 + 25 && y <= y2 + 25)
 							movingPoint = p;
 						index++;
@@ -583,8 +595,24 @@ public class Obrazek extends JPanel  implements MouseListener,  MouseMotionListe
 
 	public void mouseReleased(MouseEvent e)
 	{
+		
 		 movingPoint = null;
-		  
+		
+	/*	 for(Point p: punkty)
+		 {
+			if(e.getX() >= p.getX() && e.getY()>= p.getY() && e.getX() <= p.getX() +25 && e.getY() <= p.getY()+25 && p.getX()!=Xruchu && p.getY()!=Yruchu )				
+			{
+				int iZmiany;
+				System.out.println("zonk");
+				iZmiany=punkty.indexOf(p);
+				punkty.remove(p);
+				punkty.add(iZmiany, new Point(Xpoprzednie,Ypoprzednie));
+				 repaint();
+			} 
+					
+		 } */
+		 
+		 
 	 
 	}
  
@@ -592,8 +620,13 @@ public class Obrazek extends JPanel  implements MouseListener,  MouseMotionListe
 	public void mouseDragged(MouseEvent e) 
 	{
 		if (movingPoint != null) {
-			movingPoint.x = e.getX();
-			movingPoint.y = e.getY();
+			Xruchu = e.getX();
+			Yruchu = e.getY();
+			
+			 
+			
+			movingPoint.x = e.getX() - Xsrodek;
+			movingPoint.y = e.getY() - Ysrodek;
 			repaint();
 		}
 	}
@@ -631,7 +664,13 @@ public class Obrazek extends JPanel  implements MouseListener,  MouseMotionListe
 	}*/
 	
 	
- 
-	
+ //metoda do przypisania punktow w array
+	public void PoprzednieU()
+	{
+		for(Point p: punkty)
+		{
+			;
+		}
+	}
 	
 }
