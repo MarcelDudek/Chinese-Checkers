@@ -25,6 +25,8 @@ public class Obrazek extends JPanel  implements MouseListener,  MouseMotionListe
 	Point toRemove = null;
 	Point movingPoint = null;
 	ArrayList<Point> punkty = new ArrayList<Point>();
+	boolean kolor,kolor2,kolor3,kolor4,kolor5,kolor6;//numery odpowiadaja voidom do rys pionkow
+	//sa to flagi logiczne odpowiedzialne za zmiane koloru pionkow
 	
 	private BufferedImage image;
 
@@ -47,21 +49,21 @@ public class Obrazek extends JPanel  implements MouseListener,  MouseMotionListe
 
 		Dimension dimension = new Dimension(image.getWidth(), image.getHeight());
 		setPreferredSize(dimension);
-		Ustaw_pionki();
-		Ustaw_pionki2();
+		//Ustaw_pionki();
+		//Ustaw_pionki2();
 		Ustaw_pionki3();
 		Ustaw_pionki4();
 		Ustaw_pionki5();
 		Ustaw_pionki6();
 	}
 
-	public void Ustaw_pionki()//przemysl w ktorym miejscu wywolac metode, raczej nie paint comoponent
+	public void Ustaw_pionki(Graphics2D g3d)//przemysl w ktorym miejscu wywolac metode, raczej nie paint comoponent
 	{//lewy gorny od niego sie zaczelo
 		int ptkX,ptkX2,ptkX3,ptkX4;//doodamy przycisk w gui pt"rozmiesc pionki"
 		//bedzie zapisywal punkty ale tylko raz i bedzie mozna je usuwac, usun met z mouse clicked
 		int ptkY,ptkY2,ptkY3,ptkY4;
 		
-		
+		kolor=true;
 		
 		ptkX=198;
 		ptkY=177;
@@ -98,15 +100,27 @@ public class Obrazek extends JPanel  implements MouseListener,  MouseMotionListe
 		}
 		
 		punkty.add(new Point(ptkX4,ptkY4));
+		
+			int x1, y1;
+		
+			if(kolor=true)
+		{ 
+			for (int i =0; i<10;i++) {
+				x1 = (int) punkty.get(i).getX();
+				y1 = (int) punkty.get(i).getY();
+				g3d.fillOval(x1, y1, 25, 25);
+			}
+			kolor=false;
+		}
 	}
 	
-	public void Ustaw_pionki2()//inny kolor bedzie 6 tych metod
+	public void Ustaw_pionki2(Graphics2D g3d)//inny kolor bedzie 6 tych metod
 	{//lewy dolny operacje na y bazujac na void 1
 		int ptkX,ptkX2,ptkX3,ptkX4;
 
 		int ptkY,ptkY2,ptkY3,ptkY4;
 		
-		
+		kolor2=true;
 		
 		ptkX=198;
 		ptkY=453;
@@ -144,6 +158,16 @@ public class Obrazek extends JPanel  implements MouseListener,  MouseMotionListe
 		}
 		
 		punkty.add(new Point(ptkX4,ptkY4));
+		
+		int x1,y1;
+		if(kolor2=true)
+		{ 
+			for (int i =10; i<20;i++) {
+				x1 = (int) punkty.get(i).getX();
+				y1 = (int) punkty.get(i).getY();
+				g3d.fillOval(x1, y1, 25, 25);
+			}kolor2=false;
+		}
 	}
 
 	public void Ustaw_pionki3()//inny kolor bedzie 6 tych metod
@@ -152,6 +176,7 @@ public class Obrazek extends JPanel  implements MouseListener,  MouseMotionListe
 
 		int ptkY,ptkY2,ptkY3,ptkY4;
 		
+		kolor3=true;
 		
 		
 		ptkX=558;
@@ -198,7 +223,7 @@ public class Obrazek extends JPanel  implements MouseListener,  MouseMotionListe
 
 		int ptkY,ptkY2,ptkY3,ptkY4;
 		
-		
+		kolor4=true;
 		
 		ptkX=558;
 		ptkY=177;
@@ -243,6 +268,7 @@ public class Obrazek extends JPanel  implements MouseListener,  MouseMotionListe
 
 		int ptkY,ptkY2,ptkY3,ptkY4;
 		
+		kolor5=true;
 		
 		
 		ptkX=377;
@@ -289,7 +315,7 @@ public class Obrazek extends JPanel  implements MouseListener,  MouseMotionListe
 
 		int ptkY,ptkY2,ptkY3,ptkY4;
 		
-		
+		kolor6=true;
 		
 		ptkX=377;
 		ptkY=142;
@@ -334,8 +360,42 @@ public class Obrazek extends JPanel  implements MouseListener,  MouseMotionListe
 		Graphics2D g2d = (Graphics2D) g;
 		g2d.drawImage(image, 0, 0, this); 
 	 
-		g2d.setColor(Color.BLACK);
-		drawRectangles(g2d);
+		 
+		 
+			g2d.setColor(Color.BLACK);
+			Ustaw_pionki( g2d);
+		 
+		 
+		 
+			g2d.setColor(Color.RED);
+			Ustaw_pionki2( g2d);
+		 //dobry tok myslenia, dziala w sensie
+		 if(kolor3==true)
+		{
+			g2d.setColor(Color.BLUE);
+		}
+		if(kolor4==true)
+		{
+			g2d.setColor(Color.GREEN);
+		}
+		if(kolor5==true)
+		{
+			g2d.setColor(Color.WHITE);
+		}
+		if(kolor6==true)
+		{
+			g2d.setColor(Color.YELLOW);
+		}
+	 
+		 
+		kolor=false;//czyszczenie flag logicznych
+		kolor2=false;
+		kolor3=false;
+		kolor4=false;
+		kolor5=false;
+		kolor6=false;
+		
+		//drawRectangles(g2d);
 	
 	}
 	
@@ -504,14 +564,32 @@ public class Obrazek extends JPanel  implements MouseListener,  MouseMotionListe
 	}
 
 	
-	public void drawRectangles(Graphics2D g3d) {
+/*	public void drawRectangles(Graphics2D g3d) {
 		int x1, y1;
+		
+		if(kolor=true)
+		{ 
+			for (int i =0; i<9;i++) {
+				x1 = (int) punkty.get(i).getX();
+				y1 = (int) punkty.get(i).getY();
+				g3d.fillOval(x1, y1, 25, 25);
+			}
+			kolor=false;
+		}
+		if(kolor2=true)
+		{ 
+			for (int i =9; i<=19;i++) {
+				x1 = (int) punkty.get(i).getX();
+				y1 = (int) punkty.get(i).getY();
+				g3d.fillOval(x1, y1, 25, 25);
+			}kolor2=false;
+		}
 		for (Point p : punkty) {
 			x1 = (int) p.getX();
 			y1 = (int) p.getY();
 			g3d.fillOval(x1, y1, 25, 25);
 		}
-	}
+	}*/
 	
 	
  
