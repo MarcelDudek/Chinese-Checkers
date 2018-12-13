@@ -25,6 +25,8 @@ public class Obrazek extends JPanel  implements MouseListener,  MouseMotionListe
 	Point toRemove = null;
 	Point movingPoint = null;
 	ArrayList<Point> punkty = new ArrayList<Point>();
+	ArrayList<Point> pozaPlansze = new ArrayList<Point>();
+	
 	boolean kolor,kolor2,kolor3,kolor4,kolor5,kolor6;//numery odpowiadaja voidom do rys pionkow
 	//sa to flagi logiczne odpowiedzialne za zmiane koloru pionkow
 	
@@ -51,10 +53,10 @@ public class Obrazek extends JPanel  implements MouseListener,  MouseMotionListe
 		setPreferredSize(dimension);
 		//Ustaw_pionki();
 		//Ustaw_pionki2();
-		Ustaw_pionki3();
-		Ustaw_pionki4();
-		Ustaw_pionki5();
-		Ustaw_pionki6();
+		//Ustaw_pionki3();
+	//	Ustaw_pionki4();
+	//	Ustaw_pionki5();
+	//	Ustaw_pionki6();
 	}
 
 	public void Ustaw_pionki(Graphics2D g3d)//przemysl w ktorym miejscu wywolac metode, raczej nie paint comoponent
@@ -170,7 +172,7 @@ public class Obrazek extends JPanel  implements MouseListener,  MouseMotionListe
 		}
 	}
 
-	public void Ustaw_pionki3()//inny kolor bedzie 6 tych metod
+	public void Ustaw_pionki3(Graphics2D g3d)//inny kolor bedzie 6 tych metod
 	{//prawy dolny operacje na x bazujac na void 2
 		int ptkX,ptkX2,ptkX3,ptkX4;
 
@@ -215,9 +217,20 @@ public class Obrazek extends JPanel  implements MouseListener,  MouseMotionListe
 		}
 		
 		punkty.add(new Point(ptkX4,ptkY4));
+		
+
+		int x1,y1;
+		if(kolor3=true)
+		{ 
+			for (int i =20; i<30;i++) {
+				x1 = (int) punkty.get(i).getX();
+				y1 = (int) punkty.get(i).getY();
+				g3d.fillOval(x1, y1, 25, 25);
+			}kolor3=false;
+		}
 	}
 	
-	public void Ustaw_pionki4()//inny kolor bedzie 6 tych metod
+	public void Ustaw_pionki4(Graphics2D g3d)//inny kolor bedzie 6 tych metod
 	{//prawy gorny operacje na y bazujac na void 3
 		int ptkX,ptkX2,ptkX3,ptkX4;
 
@@ -261,8 +274,18 @@ public class Obrazek extends JPanel  implements MouseListener,  MouseMotionListe
 		}
 		
 		punkty.add(new Point(ptkX4,ptkY4));
+		
+		int x1,y1;
+		if(kolor4=true)
+		{ 
+			for (int i =30; i<40;i++) {
+				x1 = (int) punkty.get(i).getX();
+				y1 = (int) punkty.get(i).getY();
+				g3d.fillOval(x1, y1, 25, 25);
+			}kolor4=false;
+		}
 	}
-	public void Ustaw_pionki5()//inny kolor bedzie 6 tych metod
+	public void Ustaw_pionki5(Graphics2D g3d)//inny kolor bedzie 6 tych metod
 	{//dolny dolny operacje na nowej bazie
 		int ptkX,ptkX2,ptkX3,ptkX4;
 
@@ -307,9 +330,19 @@ public class Obrazek extends JPanel  implements MouseListener,  MouseMotionListe
 		}
 		
 		punkty.add(new Point(ptkX4,ptkY4));
+		
+		int x1,y1;
+		if(kolor5=true)
+		{ 
+			for (int i =40; i<50;i++) {
+				x1 = (int) punkty.get(i).getX();
+				y1 = (int) punkty.get(i).getY();
+				g3d.fillOval(x1, y1, 25, 25);
+			}kolor5=false;
+		}
 	}
 	
-	public void Ustaw_pionki6()//inny kolor bedzie 6 tych metod
+	public void Ustaw_pionki6(Graphics2D g3d)//inny kolor bedzie 6 tych metod
 	{//gorny gorny operacje na nowej bazie
 		int ptkX,ptkX2,ptkX3,ptkX4;
 
@@ -353,6 +386,17 @@ public class Obrazek extends JPanel  implements MouseListener,  MouseMotionListe
 		}
 		
 		punkty.add(new Point(ptkX4,ptkY4));
+		
+		
+		int x1,y1;
+		if(kolor6=true)
+		{ 
+			for (int i =50; i<60;i++) {
+				x1 = (int) punkty.get(i).getX();
+				y1 = (int) punkty.get(i).getY();
+				g3d.fillOval(x1, y1, 25, 25);
+			}kolor6=false;
+		}
 	}
 	
 	//@Override
@@ -367,33 +411,24 @@ public class Obrazek extends JPanel  implements MouseListener,  MouseMotionListe
 		 
 		 
 		 
-			g2d.setColor(Color.RED);
+			g2d.setColor(Color.CYAN);
 			Ustaw_pionki2( g2d);
 		 //dobry tok myslenia, dziala w sensie
-		 if(kolor3==true)
-		{
+			
 			g2d.setColor(Color.BLUE);
-		}
-		if(kolor4==true)
-		{
-			g2d.setColor(Color.GREEN);
-		}
-		if(kolor5==true)
-		{
-			g2d.setColor(Color.WHITE);
-		}
-		if(kolor6==true)
-		{
-			g2d.setColor(Color.YELLOW);
-		}
+			Ustaw_pionki3( g2d);
+			
+			g2d.setColor(Color.GRAY);
+			Ustaw_pionki4( g2d);
+		
+			g2d.setColor(Color.DARK_GRAY);
+			Ustaw_pionki5( g2d);
+			
+			g2d.setColor(Color.MAGENTA);
+			Ustaw_pionki6( g2d);
 	 
 		 
-		kolor=false;//czyszczenie flag logicznych
-		kolor2=false;
-		kolor3=false;
-		kolor4=false;
-		kolor5=false;
-		kolor6=false;
+		 
 		
 		//drawRectangles(g2d);
 	
@@ -404,7 +439,7 @@ public class Obrazek extends JPanel  implements MouseListener,  MouseMotionListe
 	public void mouseClicked(MouseEvent e)
 	{
 		//Ustaw_pionki();
-		repaint();
+		//repaint();
 	
 		/*int x,y;
 	 
@@ -483,7 +518,7 @@ public class Obrazek extends JPanel  implements MouseListener,  MouseMotionListe
 		x = e.getX();
 		y = e.getY();
 		//punkty.add(new Point(x, y));
-		System.out.println( punkty);
+		//System.out.println( punkty);
 	 
 		
 		// wspó³rzêdne kwadracików
@@ -501,17 +536,21 @@ public class Obrazek extends JPanel  implements MouseListener,  MouseMotionListe
 				// czy chcemy dodaæ, usun¹æ, lub przesun¹æ
 				if (e.getButton() == MouseEvent.BUTTON3) {
 					 
+					
 					//Point toRemove = null;
-					for (Point p : punkty) {
-						x2 = (int) p.getX();
-						y2 = (int) p.getY();
+					//for (Point p : punkty)
+					for(int i =0;i<60;i++){
+						x2 = (int) punkty.get(i).getX();
+						y2 = (int) punkty.get(i).getY();
 						if (x >= x2 && y >= y2 && x <= x2 + 25 && y <= y2 + 25)
 						{
-							toRemove = p;
+							
+							//toRemove = p;
+							punkty.set(i, new Point(0,0));
 							 
 						}
 					}
-					punkty.remove(toRemove);
+					//punkty.remove(toRemove);
 					// usuwamy kwadracik
 					//punkty.remove(toRemove);
 					repaint();
