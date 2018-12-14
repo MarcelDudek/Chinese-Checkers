@@ -37,6 +37,21 @@ public abstract class Zawodnik {
   }
   
   /**
+   * Konstruktor.
+   * @param zawodnik Zawodnik do skopiowania
+   */
+  public Zawodnik(final Zawodnik zawodnik) {
+    this.nazwa = zawodnik.podajNazwe();
+    pozycjaKoncowa = zawodnik.podajPozycje();
+    pionek = new ArrayList<Pionek>();
+    final List<Pionek> pionekZawodnik = zawodnik.podajPionki();
+    for (int i = 0; i < pionekZawodnik.size(); i++) {
+      final Pionek pion = pionekZawodnik.get(i);
+      pionek.add(pion);
+    }
+  }
+  
+  /**
    * Dodaje pionek do listy.
    * @param pozycjaX
    * @param pozycjaY
