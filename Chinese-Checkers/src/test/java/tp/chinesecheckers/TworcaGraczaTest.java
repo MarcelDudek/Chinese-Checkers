@@ -14,15 +14,25 @@ public class TworcaGraczaTest {
     Zawodnik gracz = twGracza.stworzZawodnika();
     
     List<Pionek> pionek = gracz.podajPionki();
+    List<Pionek> promien = gracz.podajPromien();
     
     assertEquals("Test1", 3, pionek.get(0).podajX());
     assertEquals("Test2", 7, pionek.get(0).podajY());
     
+    assertEquals("Test promienia 1", 21, promien.get(0).podajX());
+    assertEquals("Test promienia 2", 7, promien.get(0).podajY());
+    
     assertEquals("Test3", 3, pionek.get(4).podajX());
     assertEquals("Test4", 5, pionek.get(4).podajY());
     
+    assertEquals("Test promienia 3", 21, promien.get(4).podajX());
+    assertEquals("Test promienia 4", 5, promien.get(4).podajY());
+    
     assertEquals("Test5", 6, pionek.get(9).podajX());
     assertEquals("Test6", 4, pionek.get(9).podajY());
+    
+    assertEquals("Test promienia 5", 24, promien.get(9).podajX());
+    assertEquals("Test promienia 6", 4, promien.get(9).podajY());
   }
   
   @Test

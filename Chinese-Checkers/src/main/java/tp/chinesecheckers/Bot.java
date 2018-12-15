@@ -14,4 +14,12 @@ public class Bot extends Zawodnik {
   public Bot(final String nazwa) {
     super(nazwa);
   }
+  
+  /**
+   * Konstruktor.
+   * @param zawodnik Zawodnik do skopiowania.
+   */
+  public Bot(final Zawodnik zawodnik) {
+    super(zawodnik);
+  }
 }

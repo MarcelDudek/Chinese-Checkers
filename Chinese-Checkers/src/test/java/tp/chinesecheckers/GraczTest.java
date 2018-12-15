@@ -42,5 +42,21 @@ public class GraczTest {
     gracz.ustawPozycje(-5);
     assertEquals(0, gracz.podajPozycje());
   }
+  
+  @Test
+  public void testPromienia() {
+    Zawodnik gracz = new Gracz("Imie", 0xD0509802);
+    gracz.dodajPromien(10, 15);
+    gracz.dodajPromien(11, 15);
+    gracz.dodajPromien(10, 14);
+    
+    List<Pionek> promien = gracz.podajPromien();
+    assertEquals("promien ma 3 elementy.", 3, promien.size());
+    assertEquals("2 promien x", 11, promien.get(1).podajX());
+    assertEquals("3 promien y", 14, promien.get(2).podajY());
+    
+    List<Pionek> promien2 = gracz.podajPromien();
+    assertFalse("Funkcja zwraca kopie promienia.", promien.get(0) == promien2.get(0));
+  }
 
 }
