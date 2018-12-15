@@ -13,10 +13,16 @@ public abstract class Gra {
   protected transient int runda;
   
   /**
+   * Nazwa zawodnika, który aktualnie wykonuje ruch.
+   */
+  protected transient String wykonujeRuch;
+  
+  /**
    * Konstruktor.
    */
   public Gra() {
     this.runda = 0;
+    wykonujeRuch = "";
   }
   
   /**
@@ -39,5 +45,21 @@ public abstract class Gra {
    */
   public int podajRunde() {
     return this.runda;
+  }
+  
+  /**
+   * Ustawia nazwê gracza, który aktualnie wykonuje ruch.
+   * @param nazwa Nazwa gracza, który aktualnie wykonuje ruch.
+   */
+  public void ustawKtoWykonujeRuch(String nazwa) {
+    wykonujeRuch = new String(nazwa);
+  }
+  
+  /**
+   * Zwraca nazwê gracza, który aktualnie wykonuje ruch.
+   * @return Nazwa gracza, który aktualnie wykonuje ruch.
+   */
+  public String podajKtoWykonujeRuch() {
+    return new String(wykonujeRuch);
   }
 }

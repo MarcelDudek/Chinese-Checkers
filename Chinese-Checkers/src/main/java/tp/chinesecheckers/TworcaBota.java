@@ -16,12 +16,18 @@ public class TworcaBota extends TworcaZawodnika {
   private transient List<Pionek> pionek;
   
   /**
+   * Lista promienia.
+   */
+  private final transient List<Pionek> promien;
+  
+  /**
    * Konstruktor.
    * @param nazwa Nazwa bota
    */
   public TworcaBota(final String nazwa) {
     super(nazwa);
     pionek = new ArrayList<Pionek>();
+    promien = new ArrayList<Pionek>();
   }
   
   /**
@@ -55,17 +61,17 @@ public class TworcaBota extends TworcaZawodnika {
    * @param pozycjaX
    * @param pozycjaY
    */
-  private void rozlozNaN(final int pozycjaX, final int pozycjaY) {
-    pionek.add(new Pionek(pozycjaX, pozycjaY));
-    pionek.add(new Pionek(pozycjaX - 1, pozycjaY - 1));
-    pionek.add(new Pionek(pozycjaX + 1, pozycjaY - 1));
-    pionek.add(new Pionek(pozycjaX - 2, pozycjaY - 2));
-    pionek.add(new Pionek(pozycjaX, pozycjaY - 2));
-    pionek.add(new Pionek(pozycjaX + 2, pozycjaY - 2));
-    pionek.add(new Pionek(pozycjaX - 3, pozycjaY - 3));
-    pionek.add(new Pionek(pozycjaX - 1, pozycjaY - 3));
-    pionek.add(new Pionek(pozycjaX + 1, pozycjaY - 3));
-    pionek.add(new Pionek(pozycjaX + 3, pozycjaY - 3));
+  private void rozlozNaN(final int pozycjaX, final int pozycjaY, List<Pionek> lista) {
+    lista.add(new Pionek(pozycjaX, pozycjaY));
+    lista.add(new Pionek(pozycjaX - 1, pozycjaY - 1));
+    lista.add(new Pionek(pozycjaX + 1, pozycjaY - 1));
+    lista.add(new Pionek(pozycjaX - 2, pozycjaY - 2));
+    lista.add(new Pionek(pozycjaX, pozycjaY - 2));
+    lista.add(new Pionek(pozycjaX + 2, pozycjaY - 2));
+    lista.add(new Pionek(pozycjaX - 3, pozycjaY - 3));
+    lista.add(new Pionek(pozycjaX - 1, pozycjaY - 3));
+    lista.add(new Pionek(pozycjaX + 1, pozycjaY - 3));
+    lista.add(new Pionek(pozycjaX + 3, pozycjaY - 3));
   }
 
   /**
@@ -73,17 +79,17 @@ public class TworcaBota extends TworcaZawodnika {
    * @param pozycjaX
    * @param pozycjaY
    */
-  private void rozlozNaS(final int pozycjaX, final int pozycjaY) {
-    pionek.add(new Pionek(pozycjaX, pozycjaY));
-    pionek.add(new Pionek(pozycjaX - 1, pozycjaY + 1));
-    pionek.add(new Pionek(pozycjaX + 1, pozycjaY + 1));
-    pionek.add(new Pionek(pozycjaX - 2, pozycjaY + 2));
-    pionek.add(new Pionek(pozycjaX, pozycjaY + 2));
-    pionek.add(new Pionek(pozycjaX + 2, pozycjaY + 2));
-    pionek.add(new Pionek(pozycjaX - 3, pozycjaY + 3));
-    pionek.add(new Pionek(pozycjaX - 1, pozycjaY + 3));
-    pionek.add(new Pionek(pozycjaX + 1, pozycjaY + 3));
-    pionek.add(new Pionek(pozycjaX + 3, pozycjaY + 3));
+  private void rozlozNaS(final int pozycjaX, final int pozycjaY, List<Pionek> lista) {
+    lista.add(new Pionek(pozycjaX, pozycjaY));
+    lista.add(new Pionek(pozycjaX - 1, pozycjaY + 1));
+    lista.add(new Pionek(pozycjaX + 1, pozycjaY + 1));
+    lista.add(new Pionek(pozycjaX - 2, pozycjaY + 2));
+    lista.add(new Pionek(pozycjaX, pozycjaY + 2));
+    lista.add(new Pionek(pozycjaX + 2, pozycjaY + 2));
+    lista.add(new Pionek(pozycjaX - 3, pozycjaY + 3));
+    lista.add(new Pionek(pozycjaX - 1, pozycjaY + 3));
+    lista.add(new Pionek(pozycjaX + 1, pozycjaY + 3));
+    lista.add(new Pionek(pozycjaX + 3, pozycjaY + 3));
   }
   
   /**
@@ -101,30 +107,44 @@ public class TworcaBota extends TworcaZawodnika {
     
     switch (kierunek) {
       case N:
-        rozlozNaN(pozycjaX, pozycjaY);
+        rozlozNaN(pozycjaX, pozycjaY, pionek);
+        pozX = pozycjaX;
+        pozY = pozycjaY - 16;
+        rozlozNaS(pozX, pozY, promien);
         break;
       case S:
-        rozlozNaS(pozycjaX, pozycjaY);
+        rozlozNaS(pozycjaX, pozycjaY, pionek);
+        pozX = pozycjaX;
+        pozY = pozycjaY + 16;
+        rozlozNaS(pozX, pozY, promien);
         break;
       case NW:
         pozX = pozycjaX - 3;
         pozY = pozycjaY - 3;
-        rozlozNaS(pozX, pozY);
+        rozlozNaS(pozX, pozY, pionek);
+        pozX -= 18;
+        rozlozNaS(pozX, pozY, promien);
         break;
       case NE:
         pozX = pozycjaX + 3;
         pozY = pozycjaY - 3;
-        rozlozNaS(pozX, pozY);
+        rozlozNaS(pozX, pozY, pionek);
+        pozX += 18;
+        rozlozNaS(pozX, pozY, pionek);
         break;
       case SW:
         pozX = pozycjaX - 3;
         pozY = pozycjaY + 3;
-        rozlozNaN(pozX, pozY);
+        rozlozNaN(pozX, pozY, pionek);
+        pozX -= 18;
+        rozlozNaN(pozX, pozY, promien);
         break;
       case SE:
         pozX = pozycjaX + 3;
         pozY = pozycjaY + 3;
-        rozlozNaN(pozX, pozY);
+        rozlozNaN(pozX, pozY, pionek);
+        pozX += 18;
+        rozlozNaN(pozX, pozY, promien);
         break;
       default:
         break;

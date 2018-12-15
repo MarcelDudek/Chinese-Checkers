@@ -27,6 +27,11 @@ public abstract class Zawodnik {
   private final transient List<Pionek> pionek;
   
   /**
+   * Promien przedstawiony jako pionki na danych pozycjach.
+   */
+  private final transient List<Pionek> promien;
+  
+  /**
    * Konstruktor.
    * @param nazwa Nazwa zawodnika.
    */
@@ -34,6 +39,7 @@ public abstract class Zawodnik {
     this.nazwa = nazwa;
     pozycjaKoncowa = 0;
     pionek = new ArrayList<Pionek>();
+    promien = new ArrayList<Pionek>();
   }
   
   /**
@@ -43,11 +49,19 @@ public abstract class Zawodnik {
   public Zawodnik(final Zawodnik zawodnik) {
     this.nazwa = zawodnik.podajNazwe();
     pozycjaKoncowa = zawodnik.podajPozycje();
+    
     pionek = new ArrayList<Pionek>();
     final List<Pionek> pionekZawodnik = zawodnik.podajPionki();
     for (int i = 0; i < pionekZawodnik.size(); i++) {
       final Pionek pion = pionekZawodnik.get(i);
       pionek.add(pion);
+    }
+    
+    promien = new ArrayList<Pionek>();
+    final List<Pionek> promienZawodnik = zawodnik.podajPromien();
+    for (int i = 0; i < promienZawodnik.size(); i++) {
+      final Pionek prom = promienZawodnik.get(i);
+      pionek.add(prom);
     }
   }
   
@@ -119,5 +133,27 @@ public abstract class Zawodnik {
       pion.add(new Pionek(pionek.get(i)));
     }
     return pion;
+  }
+  
+  /**
+   * Dodaje pionek do promienia.
+   * @param pozycjaX
+   * @param pozycjaY
+   */
+  public void dodajPromien(final int pozycjaX, final int pozycjaY) {
+    final Pionek prom = new Pionek(pozycjaX, pozycjaY);
+    promien.add(prom);
+  }
+  
+  /**
+   * Zwraca kopiê listy promienia.
+   * @return Kopia listy promienia.
+   */
+  public List<Pionek> podajPromien() {
+    final List<Pionek> prom = new ArrayList<Pionek>();
+    for (int i = 0; i < promien.size(); i++) {
+      prom.add(new Pionek(promien.get(i)));
+    }
+    return prom;
   }
 }
