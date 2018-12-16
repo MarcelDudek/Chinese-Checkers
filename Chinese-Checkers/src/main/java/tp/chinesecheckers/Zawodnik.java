@@ -61,7 +61,7 @@ public abstract class Zawodnik {
     final List<Pionek> promienZawodnik = zawodnik.podajPromien();
     for (int i = 0; i < promienZawodnik.size(); i++) {
       final Pionek prom = promienZawodnik.get(i);
-      pionek.add(prom);
+      promien.add(prom);
     }
   }
   
