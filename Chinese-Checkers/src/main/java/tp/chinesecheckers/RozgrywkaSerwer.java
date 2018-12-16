@@ -4,9 +4,9 @@ import tp.chinesecheckers.exception.NiepoprawnyRuch;
 
 public interface RozgrywkaSerwer {
 
-  public void dodajGracza(String nazwa, long ipAdres);
+  public void dodajGracza(String nazwa, long ipAdres, int iloscGraczy);
   
-  public void dodajBota(String nazwa);
+  public void dodajBota(String nazwa, int iloscGraczy);
   
   public void zamienGraczaNaBota(String nazwa);
   

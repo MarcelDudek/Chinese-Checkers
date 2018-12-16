@@ -13,7 +13,7 @@ public class TworcaGracza extends TworcaZawodnika {
   /**
    * Adres ip gracza.
    */
-  private transient int ipAdres;
+  private transient long ipAdres;
   
   /**
    * Lista pionkow.
@@ -30,7 +30,7 @@ public class TworcaGracza extends TworcaZawodnika {
    * @param nazwa Nazwa gracza
    * @param ipAdres Adres ip gracza
    */
-  public TworcaGracza(final String nazwa, final int ipAdres) {
+  public TworcaGracza(final String nazwa, final long ipAdres) {
     super(nazwa);
     this.ipAdres = ipAdres;
     this.pionek = new ArrayList<Pionek>();

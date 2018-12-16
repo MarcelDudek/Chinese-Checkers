@@ -18,7 +18,7 @@ public class TworcaBota extends TworcaZawodnika {
   /**
    * Lista promienia.
    */
-  private final transient List<Pionek> promien;
+  private transient List<Pionek> promien;
   
   /**
    * Konstruktor.
@@ -44,6 +44,13 @@ public class TworcaBota extends TworcaZawodnika {
       bot.dodajPionek(pion.podajX(), pion.podajY());
     }
     
+    //Dodanie promienia do bota
+    Pionek prom;
+    for (int i = 0; i < pionek.size(); i++) {
+      prom = promien.get(i);
+      bot.dodajPromien(prom.podajX(), prom.podajY());
+    }
+    
     return bot;
   }
   
@@ -53,6 +60,7 @@ public class TworcaBota extends TworcaZawodnika {
    */
   public void wczytajGracza(final Gracz gracz) {
     this.pionek = gracz.podajPionki();
+    this.promien = gracz.podajPromien();
     this.nazwa = gracz.podajNazwe();
   }
   
