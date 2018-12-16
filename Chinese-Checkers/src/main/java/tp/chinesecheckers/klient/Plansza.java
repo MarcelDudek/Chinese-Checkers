@@ -5,6 +5,7 @@ import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
@@ -28,15 +29,16 @@ public class Plansza extends JPanel
 
 	public Plansza() {
 		super();
-
+	 
 		addMouseListener(this);
 		addMouseMotionListener(this);
 		setPreferredSize(new Dimension(300, 400));
-
-		File imageFile = new File(
-				"C:\\Users\\Kazik\\Desktop\\warcaby2Obraz.jpg");
+		 
+		//File imageFile = new File(
+			//	"C:\\Users\\Kazik\\Desktop\\warcaby2Obraz.jpg");
 		try {
-			image = ImageIO.read(imageFile);
+			URL imageURL = new URL("https://github.com/MarcelDudek/Chinese-Checkers/blob/Jakub_Kod/Chinese-Checkers/src/main/java/tp/chinesecheckers/klient/warcaby2Obraz.jpg?raw=true");
+			image = ImageIO.read(imageURL);
 		} catch (IOException e) {
 			System.err.println("Blad odczytu obrazka");
 			e.printStackTrace();
@@ -46,6 +48,7 @@ public class Plansza extends JPanel
 				image.getHeight());
 		setPreferredSize(dimension);
 		pionki = new Piony();
+		 
 
 	}
 
