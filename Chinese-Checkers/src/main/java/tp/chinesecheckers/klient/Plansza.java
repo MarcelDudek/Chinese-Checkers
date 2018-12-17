@@ -53,6 +53,8 @@ public class Plansza extends JPanel
 	int Xsrodek;
 	int Ysrodek;
 
+	Klient wysylaj;
+
 	public Plansza() {
 		super();
 
@@ -76,7 +78,8 @@ public class Plansza extends JPanel
 		setPreferredSize(dimension);
 		pionki = new Piony();
 		pionki.IloscGraczy = iloscGraczy;
-
+		wysylaj = new Klient();
+		wysylaj.doDziela();
 	}
 
 	public void paintComponent(Graphics g) {
@@ -159,12 +162,13 @@ public class Plansza extends JPanel
 		XpoRuchu = e.getX();// te wspolrzedne beda wysylane do serwera
 		YpoRuchu = e.getY();
 		repaint();
-		Klient wysylaj = new Klient();
+		// Klient wysylaj = new Klient();
 
 		wysylaj.punktX = Integer.toString(XpoRuchu);
 		wysylaj.punktY = Integer.toString(YpoRuchu);
-		wysylaj.doDziela();// jak juz bedzie gotowy serwer to dodamy odbieranie
-							// ilosci graczy
+		// wysylaj.doDziela();// jak juz bedzie gotowy serwer to dodamy
+		// odbieranie
+		// ilosci graczy
 		// poniewaz klient jest klasa wewn, nie bedzie problemu z wymiana danych
 
 	}
