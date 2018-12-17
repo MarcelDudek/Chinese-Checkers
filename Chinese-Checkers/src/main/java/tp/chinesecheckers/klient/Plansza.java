@@ -19,7 +19,9 @@ public class Plansza extends JPanel
 	private static final long serialVersionUID = 1L;
 	Point movingPoint = null;
 	ArrayList<Point> punkty = new ArrayList<Point>();
-
+	
+	int iloscGraczy=6;
+	
 	private BufferedImage image;
 
 	Piony pionki;
@@ -48,18 +50,47 @@ public class Plansza extends JPanel
 				image.getHeight());
 		setPreferredSize(dimension);
 		pionki = new Piony();
-		 
+		repaint();
 
 	}
 
 	public void paintComponent(Graphics g) {
 		Graphics2D g2d = (Graphics2D) g;
 		g2d.drawImage(image, 0, 0, this);
+	 
+		if(iloscGraczy==2)
+		{
+	 
+			pionki.Ustaw_pionki(g2d); 
+			pionki.Ustaw_pionki3(g2d);
+		}
+		else if(iloscGraczy==3)
+		{
+			pionki.Ustaw_pionki(g2d);
+			pionki.Ustaw_pionki4(g2d);
+			pionki.Ustaw_pionki5(g2d);
+		}
+		else if(iloscGraczy==4)
+		{
+			pionki.Ustaw_pionki(g2d);
+			pionki.Ustaw_pionki2(g2d);
+			pionki.Ustaw_pionki3(g2d);//kolejnosc jest istotna w tych warunkach
+			pionki.Ustaw_pionki4(g2d);//bazuja na ifach i petlach for z klasy piony
+		}
+		else if(iloscGraczy==6)
+		{
+			pionki.Ustaw_pionki(g2d);
+			pionki.Ustaw_pionki2(g2d);
+			pionki.Ustaw_pionki3(g2d);
+			pionki.Ustaw_pionki4(g2d);
+			pionki.Ustaw_pionki5(g2d);
+			pionki.Ustaw_pionki6(g2d);
+			
+		}
 		for (Point p : pionki.punkty) {
 			punkty.add(p);
 		}
-		pionki.Ustaw_pionki(g2d);
-
+		
 	}
 
 	public void mouseClicked(MouseEvent e) {
@@ -102,7 +133,7 @@ public class Plansza extends JPanel
 
 		repaint();
 	}
-
+//trzeba bedzie doddac buforowane zmienne
 	public void mouseReleased(MouseEvent e) {
 
 		movingPoint = null;
