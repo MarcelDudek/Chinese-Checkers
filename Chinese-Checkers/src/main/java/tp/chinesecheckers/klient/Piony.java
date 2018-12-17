@@ -8,7 +8,8 @@ import java.util.ArrayList;
 public class Piony {
 
 	ArrayList<Point> punkty = new ArrayList<Point>();
-	int IloscGraczy=6;
+	int IloscGraczy=6; //gdy serwer przesle klasie plansza ilosc graczy w klasie plansza,
+	//ustawimy wartosc tutaj
 	
 	public void Ustaw_pionki(Graphics2D g3d)
 

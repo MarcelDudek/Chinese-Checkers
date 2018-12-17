@@ -17,7 +17,8 @@ public class Klient {
 	PrintWriter pisarz;
 	Socket gniazdo;
 	Frame ramka;
-	
+	String punktX;
+	String punktY;
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 	 
@@ -53,6 +54,7 @@ public class Klient {
 		
 		Thread watekOdbiorcy = new Thread(new OdbiorcaKomunikatow());
 		watekOdbiorcy.start();
+	 
 		
 		ramka.getContentPane().add(BorderLayout.CENTER, panelGlowny);
 		ramka.setSize(400, 500);
@@ -74,7 +76,9 @@ public class Klient {
 			{
 				ex.printStackTrace();
 			}
-			wiadomosc.setText("");
+			
+			
+			wiadomosc.setText( punktX + punktY);
 			wiadomosc.requestFocus();
 		}
 	}
@@ -118,6 +122,9 @@ public class Klient {
 		}
 		
 	}
+
+ 
+	
 	
 
 }
