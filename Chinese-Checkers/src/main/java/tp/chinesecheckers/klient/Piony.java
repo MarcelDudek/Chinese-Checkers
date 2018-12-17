@@ -8,7 +8,9 @@ import java.util.ArrayList;
 public class Piony {
 
 	ArrayList<Point> punkty = new ArrayList<Point>();
-
+	int IloscGraczy=6; //gdy serwer przesle klasie plansza ilosc graczy w klasie plansza,
+	//ustawimy wartosc tutaj
+	
 	public void Ustaw_pionki(Graphics2D g3d)
 
 	{
@@ -94,12 +96,13 @@ public class Piony {
 		punkty.add(new Point(ptkX4, ptkY4));
 
 		int x1, y1;
-
-		for (int i = 10; i < 20; i++) {
-			x1 = (int) punkty.get(i).getX();
-			y1 = (int) punkty.get(i).getY();
-			g3d.fillOval(x1, y1, 25, 25);
-		}
+		
+			for (int i = 10; i < 20; i++) {
+				x1 = (int) punkty.get(i).getX();
+				y1 = (int) punkty.get(i).getY();
+				g3d.fillOval(x1, y1, 25, 25);
+			}
+		
 	}
 
 	public void Ustaw_pionki3(Graphics2D g3d) {// prawy dolny
@@ -140,10 +143,35 @@ public class Piony {
 
 		int x1, y1;
 
-		for (int i = 20; i < 30; i++) {
-			x1 = (int) punkty.get(i).getX();
-			y1 = (int) punkty.get(i).getY();
-			g3d.fillOval(x1, y1, 25, 25);
+		if(IloscGraczy==2)
+		{
+			
+			for (int i = 10; i < 20; i++) {
+				x1 = (int) punkty.get(i).getX();
+				y1 = (int) punkty.get(i).getY();
+				g3d.fillOval(x1, y1, 25, 25);
+			}
+
+			
+		}
+		else if(IloscGraczy==4)
+		{
+			
+
+			for (int i = 20; i < 30; i++) {
+				x1 = (int) punkty.get(i).getX();
+				y1 = (int) punkty.get(i).getY();
+				g3d.fillOval(x1, y1, 25, 25);
+			}
+			
+		}
+		else if(IloscGraczy==6)
+		{
+			for (int i = 20; i < 30; i++) {
+				x1 = (int) punkty.get(i).getX();
+				y1 = (int) punkty.get(i).getY();
+				g3d.fillOval(x1, y1, 25, 25);
+			}
 		}
 	}
 
@@ -185,10 +213,32 @@ public class Piony {
 
 		int x1, y1;
 
-		for (int i = 30; i < 40; i++) {
-			x1 = (int) punkty.get(i).getX();
-			y1 = (int) punkty.get(i).getY();
-			g3d.fillOval(x1, y1, 25, 25);
+		if(IloscGraczy==3)
+		{
+			for (int i = 10; i < 20; i++) {
+				x1 = (int) punkty.get(i).getX();
+				y1 = (int) punkty.get(i).getY();
+				g3d.fillOval(x1, y1, 25, 25);
+			}
+			
+		}
+		else if(IloscGraczy==4)
+		{
+
+			for (int i = 30; i < 40; i++) {
+				x1 = (int) punkty.get(i).getX();
+				y1 = (int) punkty.get(i).getY();
+				g3d.fillOval(x1, y1, 25, 25);
+			}
+		}
+		else if(IloscGraczy==6)
+		{
+		
+			for (int i = 30; i < 40; i++) {
+				x1 = (int) punkty.get(i).getX();
+				y1 = (int) punkty.get(i).getY();
+				g3d.fillOval(x1, y1, 25, 25);
+			}
 		}
 	}
 	public void Ustaw_pionki5(Graphics2D g3d) {// dolny dolny
@@ -229,10 +279,21 @@ public class Piony {
 
 		int x1, y1;
 
-		for (int i = 40; i < 50; i++) {
-			x1 = (int) punkty.get(i).getX();
-			y1 = (int) punkty.get(i).getY();
-			g3d.fillOval(x1, y1, 25, 25);
+		if(IloscGraczy==3)
+		{
+			for (int i = 20; i < 30; i++) {
+				x1 = (int) punkty.get(i).getX();
+				y1 = (int) punkty.get(i).getY();
+				g3d.fillOval(x1, y1, 25, 25);
+			}
+		}
+		else if(IloscGraczy==6)
+		{
+			for (int i = 40; i < 50; i++) {
+				x1 = (int) punkty.get(i).getX();
+				y1 = (int) punkty.get(i).getY();
+				g3d.fillOval(x1, y1, 25, 25);
+			}
 		}
 	}
 
@@ -281,6 +342,18 @@ public class Piony {
 
 		}
 
+	}
+	public void  RysujPionki(Graphics2D g3d)
+	{
+		int x1, y1;
+		for(Point p : punkty) 
+		{
+			x1 = (int) p.getX();
+			y1 = (int) p.getY();
+			g3d.fillOval(x1, y1, 25, 25);
+		}
+		
+		
 	}
 
 }
