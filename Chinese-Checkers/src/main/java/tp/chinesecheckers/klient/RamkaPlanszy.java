@@ -3,7 +3,7 @@ package tp.chinesecheckers.klient;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-import com.sun.javafx.scene.paint.GradientUtils.Point;
+//import com.sun.javafx.scene.paint.GradientUtils.Point;
 
 public class RamkaPlanszy extends JFrame {
 
