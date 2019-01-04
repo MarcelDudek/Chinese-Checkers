@@ -1,9 +1,11 @@
 package tp.chinesecheckers.serwer;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.net.SocketException;
 
 class Polaczenie implements Runnable {
 
@@ -38,6 +40,15 @@ class Polaczenie implements Runnable {
     }
   }
   
+  public void zamknijPolaczenie() {
+    try {
+    socket.close();
+    reader.close();
+    readerBuffer.close();
+    writer.close();
+    } catch (IOException ex) {}
+  }
+  
   @Override
   public void run() {
     running = true;
@@ -47,12 +58,14 @@ class Polaczenie implements Runnable {
       readerBuffer = new BufferedReader(reader);
       writer = new PrintWriter(socket.getOutputStream());
       
-      while(true) {
+      while(!serwer.czyZamkniety()) {
         wiadomosc = readerBuffer.readLine();
         if(ruch) {
           serwer.podajWiadomosc(wiadomosc);
         }
       }
+    } catch(SocketException ex) {
+      
     } catch(Exception ex) {
       ex.printStackTrace();
     }

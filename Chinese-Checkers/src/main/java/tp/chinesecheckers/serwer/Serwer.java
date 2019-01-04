@@ -6,12 +6,15 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.SocketTimeoutException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
 import tp.chinesecheckers.GraDomyslnaSerwer;
+import tp.chinesecheckers.Gracz;
 import tp.chinesecheckers.TworcaGryDomyslnejSerwer;
+import tp.chinesecheckers.Zawodnik;
 import tp.chinesecheckers.exception.NiepoprawnyRuch;
 
 public class Serwer implements Runnable{
@@ -23,6 +26,7 @@ public class Serwer implements Runnable{
   private String wiadomoscOdPolaczenia = "";
   private GraDomyslnaSerwer gra;
   private ServerSocket socketSerwer;
+  private boolean zamkniecieSerwera;
   
   public Serwer(int port, int iloscGraczy) {
     this.port = port;
@@ -30,6 +34,7 @@ public class Serwer implements Runnable{
     this.uzupelnijBotami = false;
     this.gra = null;
     this.socketSerwer = null;
+    this.zamkniecieSerwera = false;
   }
   
   public void uzupelnijGreBotami() {
@@ -51,9 +56,14 @@ public class Serwer implements Runnable{
       polaczZKlientem();
       
       //Jezeli osiagnieto wymagana liczbe graczy
-      if(polaczenie.size() == iloscGraczy) {
+      if(polaczenie.size() == iloscGraczy || zamkniecieSerwera) {
         break;
       }
+    }
+    
+    if(zamkniecieSerwera) {
+      zamknijSockety();
+      return;
     }
     
     //Start gry
@@ -64,6 +74,7 @@ public class Serwer implements Runnable{
     for (int i = 0; i < iloscGraczy; i++) {
       if (i >= polaczenie.size()) {
         tworca.dodajGracza("Bot" + i, 0, true);
+        System.out.println("Dodano bota.");
         continue;
       }
       Polaczenie pol = polaczenie.get(i);
@@ -77,7 +88,17 @@ public class Serwer implements Runnable{
     
     //Petla gry
     while(true) {
-      rozegrajRunde(aktualnyRuch);
+      if(zamkniecieSerwera) {
+        zamknijSockety();
+        return;
+      }
+      
+      Zawodnik aktualnyRuchZawodnik = gra.podajListeZawodnikow().get(aktualnyRuch);
+      if(aktualnyRuchZawodnik instanceof Gracz) {
+        rozegrajRunde(aktualnyRuch);
+      } else {
+        gra.wykonajRuchBota(aktualnyRuchZawodnik.podajNazwe());
+      }
       
       //Przygotowanie do nastepnej rundy
       wiadomoscOdPolaczenia = "";
@@ -86,13 +107,21 @@ public class Serwer implements Runnable{
         aktualnyRuch = 0;
       }
     }
-    //socketSerwer.close();
   }
   
   private void polaczZKlientem() {
     try {
       //Czekaj na polaczenie klienta z serwerem
-      Socket socketKlient = socketSerwer.accept();
+      socketSerwer.setSoTimeout(1000);
+      Socket socketKlient = null;
+      while(socketKlient == null) {
+        if(this.uzupelnijBotami || this.zamkniecieSerwera) {
+          return;
+        }
+        try {
+          socketKlient = socketSerwer.accept();
+        } catch (SocketTimeoutException ex) {}
+      }
       System.out.println("Polaczono klienta");
       InputStreamReader reader = new InputStreamReader(socketKlient.getInputStream());
       BufferedReader readerBuffer = new BufferedReader(reader);
@@ -142,6 +171,9 @@ public class Serwer implements Runnable{
     try {
       while(wiadomoscOdPolaczenia.equals("")) {
         Thread.sleep(1000);
+        if(this.zamkniecieSerwera) {
+          return;
+        }
       }
     } catch (InterruptedException ex) {
       ex.printStackTrace();
@@ -171,5 +203,31 @@ public class Serwer implements Runnable{
   
   public void podajWiadomosc(String wiadomosc) {
     this.wiadomoscOdPolaczenia = wiadomosc;
+  }
+  
+  public void zamknijSerwer() {
+    zamkniecieSerwera = true;
+    System.out.println("Zamkniêto serwer.");
+  }
+  
+  private void zamknijSockety() {
+    for(Polaczenie pol: polaczenie) {
+      pol.zamknijPolaczenie();
+    }
+    try {
+      this.socketSerwer.close();
+    } catch (IOException ex) {}
+  }
+  
+  public List<String> podajListePolaczen() {
+    List<String> lista = new ArrayList<String>();
+    for(Polaczenie pol: polaczenie) {
+      lista.add(pol.podajNazwe());
+    }
+    return lista;
+  }
+  
+  public boolean czyZamkniety() {
+    return this.zamkniecieSerwera;
   }
 }

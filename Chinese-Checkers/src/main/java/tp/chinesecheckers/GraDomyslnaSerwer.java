@@ -291,6 +291,14 @@ public class GraDomyslnaSerwer extends GraDomyslna implements RozgrywkaSerwer {
       }
     }
   }
+  
+  @Override
+  /**
+   * Wykonuje ruch bota.
+   */
+  public void wykonajRuchBota(String nazwa) {
+    
+  }
 
   /**
    * Generuje wiadomosc do klientow ze stanem rozgrywki.
