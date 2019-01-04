@@ -94,10 +94,12 @@ public class Serwer implements Runnable{
       }
       
       Zawodnik aktualnyRuchZawodnik = gra.podajListeZawodnikow().get(aktualnyRuch);
-      if(aktualnyRuchZawodnik instanceof Gracz) {
-        rozegrajRunde(aktualnyRuch);
-      } else {
-        gra.wykonajRuchBota(aktualnyRuchZawodnik.podajNazwe());
+      if(aktualnyRuchZawodnik.podajPozycje() == 0) {
+        if(aktualnyRuchZawodnik instanceof Gracz) {
+          rozegrajRunde(aktualnyRuch);
+        } else {
+          gra.wykonajRuchBota(aktualnyRuchZawodnik.podajNazwe());
+        }
       }
       
       //Przygotowanie do nastepnej rundy
@@ -169,8 +171,16 @@ public class Serwer implements Runnable{
     Polaczenie polRuch = polaczenie.get(aktualnyRuch);
     polRuch.ruch = true;
     try {
+      int oczekiwanie = 0;
       while(wiadomoscOdPolaczenia.equals("")) {
         Thread.sleep(1000);
+        oczekiwanie++;
+        //Je¿eli czekano 30 sekund, zamieñ gracza na bota
+        if(oczekiwanie == 30) {
+          gra.zamienGraczaNaBota(polRuch.podajNazwe());
+          polRuch.zamknijPolaczenie();
+          return;
+        }
         if(this.zamkniecieSerwera) {
           return;
         }
@@ -193,11 +203,18 @@ public class Serwer implements Runnable{
   }
   
   private boolean sprawdzCzyNazwaWolna(String nazwa) {
+    //Czy pokrywa sie z jakimœ graczem
     for(int i=0; i < polaczenie.size(); i++) {
       if(nazwa.equals(polaczenie.get(i).podajNazwe())) {
         return false;
       }
     }
+    //Czy pokrywa siê z nazwami botów
+    if(nazwa.equals("Bot1") || nazwa.equals("Bot2") || nazwa.equals("Bot3") ||
+        nazwa.equals("Bot4") || nazwa.equals("Bot5") || nazwa.equals("Bot6")) {
+      return false;
+    }
+    
     return true; 
   }
   
