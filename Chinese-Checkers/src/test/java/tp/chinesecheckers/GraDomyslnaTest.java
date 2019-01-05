@@ -40,5 +40,4 @@ public class GraDomyslnaTest {
     
     assertFalse("Nie powinny byc tym samym obiektem.", lista.get(0) == zawodnik1);
   }
-
 }

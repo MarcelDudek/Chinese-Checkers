@@ -6,40 +6,87 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.SocketTimeoutException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
 import tp.chinesecheckers.GraDomyslnaSerwer;
+import tp.chinesecheckers.Gracz;
 import tp.chinesecheckers.TworcaGryDomyslnejSerwer;
+import tp.chinesecheckers.Zawodnik;
 import tp.chinesecheckers.exception.NiepoprawnyRuch;
 
-public class Serwer implements Runnable{
+/**
+ * 
+ * @author mdlot
+ *
+ */
+public class Serwer implements Runnable {
 
-  private int port;
-  private int iloscGraczy;
-  private boolean uzupelnijBotami;
-  private List<Polaczenie> polaczenie = new ArrayList<Polaczenie>();
-  private String wiadomoscOdPolaczenia = "";
-  private GraDomyslnaSerwer gra;
-  private ServerSocket socketSerwer;
+  /**
+   * Port, na którym uruchomiony jest serwer.
+   */
+  private final transient int port;
+  /**
+   * Iloœc graczy podczas gry.
+   */
+  private final transient int iloscGraczy;
+  /**
+   * Czy serwer powinien uzupe³nic wolne miejsca botami.
+   */
+  private transient boolean uzupelnijBotami;
+  /**
+   * Lista po³¹czeñ.
+   */
+  private final transient List<Polaczenie> polaczenie = new ArrayList<Polaczenie>();
+  /**
+   * Wiadomoœc od po³¹czenia, które aktualnie wykonuje ruch.
+   */
+  private transient String wiadomoscOdPolaczenia = "";
+  /**
+   * Obiekt gry.
+   */
+  private transient GraDomyslnaSerwer gra;
+  /**
+   * Socket serwera.
+   */
+  private transient ServerSocket socketSerwer;
+  /**
+   * Czy serwer powinien zostac zamkniety.
+   */
+  private transient boolean zamkniecieSerwera;
   
-  public Serwer(int port, int iloscGraczy) {
+  /**
+   * 
+   * @param port Port, na którym zostanie uruchomiony serwer
+   * @param iloscGraczy Iloœc graczy
+   */
+  public Serwer(final int port, final int iloscGraczy) {
     this.port = port;
     this.iloscGraczy = iloscGraczy;
     this.uzupelnijBotami = false;
-    this.gra = null;
-    this.socketSerwer = null;
+    //this.gra = null;
+    //this.socketSerwer = null;
+    this.zamkniecieSerwera = false;
   }
   
+  /**
+   * Przestaje oczekiwac na po³¹czenie gracza i wype³nia resztê miejsc botami.
+   */
   public void uzupelnijGreBotami() {
-    this.uzupelnijBotami = true;
+    if (!this.polaczenie.isEmpty()) {
+      this.uzupelnijBotami = true;
+    }
   }
   
+  /**
+   * Metoda w¹tku.
+   */
   public void run() {
     try {
       socketSerwer = new ServerSocket(port);
-    } catch(IOException ex) {
+    } catch (IOException ex) {
       ex.printStackTrace();
       return;
     }
@@ -47,64 +94,94 @@ public class Serwer implements Runnable{
     System.out.println("Uruchomiono serwer");
     
     //Oczekiwanie na dolaczenie graczy
-    while(!uzupelnijBotami) {
+    while (!uzupelnijBotami) {
       polaczZKlientem();
       
       //Jezeli osiagnieto wymagana liczbe graczy
-      if(polaczenie.size() == iloscGraczy) {
+      if (polaczenie.size() == iloscGraczy || zamkniecieSerwera) {
         break;
       }
+    }
+    
+    if (zamkniecieSerwera) {
+      zamknijSockety();
+      return;
     }
     
     //Start gry
     System.out.println("Startowanie gry");
     
     //Stworzenie obiektu gry
-    TworcaGryDomyslnejSerwer tworca = new TworcaGryDomyslnejSerwer(iloscGraczy);
+    final TworcaGryDomyslnejSerwer tworca = new TworcaGryDomyslnejSerwer(iloscGraczy);
     for (int i = 0; i < iloscGraczy; i++) {
       if (i >= polaczenie.size()) {
         tworca.dodajGracza("Bot" + i, 0, true);
+        System.out.println("Dodano bota.");
         continue;
       }
-      Polaczenie pol = polaczenie.get(i);
+      final Polaczenie pol = polaczenie.get(i);
       tworca.dodajGracza(pol.podajNazwe(), 0, false);
     }
     gra = (GraDomyslnaSerwer)tworca.stworzGre();
     
     //Wylosowanie startujacego gracza
-    Random rand = new Random();
+    final Random rand = new Random();
     int aktualnyRuch = rand.nextInt(iloscGraczy);
     
     //Petla gry
-    while(true) {
-      rozegrajRunde(aktualnyRuch);
+    while (true) {
+      if (zamkniecieSerwera) {
+        zamknijSockety();
+        return;
+      }
+      
+      final Zawodnik aktualnyRuchZawodnik = gra.podajListeZawodnikow().get(aktualnyRuch);
+      boolean wykonanoRuch = true;
+      if (aktualnyRuchZawodnik.podajPozycje() == 0) {
+        if (aktualnyRuchZawodnik instanceof Gracz) {
+          wykonanoRuch = rozegrajRunde(aktualnyRuch);
+        } else {
+          gra.wykonajRuchBota(aktualnyRuchZawodnik.podajNazwe());
+          wykonanoRuch = true;
+        }
+      }
       
       //Przygotowanie do nastepnej rundy
       wiadomoscOdPolaczenia = "";
-      aktualnyRuch++;
-      if(aktualnyRuch ==  iloscGraczy) {
+      if (wykonanoRuch) {
+        aktualnyRuch++;
+      }
+      if (aktualnyRuch ==  iloscGraczy) {
         aktualnyRuch = 0;
       }
     }
-    //socketSerwer.close();
   }
   
   private void polaczZKlientem() {
     try {
       //Czekaj na polaczenie klienta z serwerem
-      Socket socketKlient = socketSerwer.accept();
+      socketSerwer.setSoTimeout(1000);
+      Socket socketKlient = null;
+      while (socketKlient == null) {
+        if (this.uzupelnijBotami || this.zamkniecieSerwera) {
+          return;
+        }
+        try {
+          socketKlient = socketSerwer.accept();
+        } catch (SocketTimeoutException ex) {}
+      }
       System.out.println("Polaczono klienta");
-      InputStreamReader reader = new InputStreamReader(socketKlient.getInputStream());
-      BufferedReader readerBuffer = new BufferedReader(reader);
-      PrintWriter writer = new PrintWriter(socketKlient.getOutputStream());
+      final InputStreamReader reader = new InputStreamReader(socketKlient.getInputStream());
+      final BufferedReader readerBuffer = new BufferedReader(reader);
+      final PrintWriter writer = new PrintWriter(socketKlient.getOutputStream());
       
       //Pobierz nazwe
       writer.println("podaj_nazwe");
       writer.flush();
-      String wiadomosc = readerBuffer.readLine();
+      final String wiadomosc = readerBuffer.readLine();
       
       //Sprawdz czy nazwa zajeta
-      if(sprawdzCzyNazwaWolna(wiadomosc)) {
+      if (sprawdzCzyNazwaWolna(wiadomosc)) {
         //Dodanie klienta do obslugiwanych polaczen i wyslanie potwierdzienia poprawnego polaczenia
         polaczenie.add(new Polaczenie(wiadomosc, socketKlient, this));
         System.out.println("Polaczono gracza: " + wiadomosc);
@@ -112,7 +189,7 @@ public class Serwer implements Runnable{
         writer.flush();
         
         //Uruchomienie watku obslugujacego polaczenie z danym klientem
-        Thread thr = new Thread(polaczenie.get(polaczenie.size() - 1));
+        final Thread thr = new Thread(polaczenie.get(polaczenie.size() - 1));
         thr.start();
       } else {
         //Nieudane polaczenie, wyslij do klienta informacje o zajetej nazwie i rozlacz polaczenie
@@ -126,50 +203,113 @@ public class Serwer implements Runnable{
     }
   }
   
-  private void rozegrajRunde(int aktualnyRuch) {
+  private boolean rozegrajRunde(final int aktualnyRuch) {
     //Podbicie licznika rund
     gra.ustawRunde(gra.podajRunde() + 1);
     
     //wyslanie stanu gry
-    String wiadomoscStanuGry = gra.wygenerujWiadomosc(polaczenie.get(aktualnyRuch).podajNazwe());
+    final String wiadomoscStanuGry =
+        gra.wygenerujWiadomosc(polaczenie.get(aktualnyRuch).podajNazwe());
     for (int i = 0; i < polaczenie.size(); i++) {
       polaczenie.get(i).wyslijWiadomosc(wiadomoscStanuGry);
     }
     
     //Czekanie na wiadomosc od klienta, ktory wykonuje aktualny ruch
-    Polaczenie polRuch = polaczenie.get(aktualnyRuch);
+    final Polaczenie polRuch = polaczenie.get(aktualnyRuch);
     polRuch.ruch = true;
     try {
-      while(wiadomoscOdPolaczenia.equals("")) {
+      int oczekiwanie = 0;
+      while (wiadomoscOdPolaczenia.equals("")) {
         Thread.sleep(1000);
+        oczekiwanie++;
+        //Je¿eli czekano 30 sekund, zamieñ gracza na bota
+        if (oczekiwanie == 30) {
+          gra.zamienGraczaNaBota(polRuch.podajNazwe());
+          polRuch.zamknijPolaczenie();
+          return false;
+        }
+        if (this.zamkniecieSerwera) {
+          return false;
+        }
       }
     } catch (InterruptedException ex) {
       ex.printStackTrace();
     }
     
     //Rozkodowanie wiadomosci
-    String[] pozycja = wiadomoscOdPolaczenia.split(",");
+    final String[] pozycja = wiadomoscOdPolaczenia.split(",");
     
+    //Wykonanie ruchu
+    boolean wykonano = true;
     try {
-      gra.wykonajRuch(polRuch.podajNazwe(), Integer.parseInt(pozycja[0]), Integer.parseInt(pozycja[1]),
-          Integer.parseInt(pozycja[2]), Integer.parseInt(pozycja[3]));
+      gra.wykonajRuch(polRuch.podajNazwe(), Integer.parseInt(pozycja[0]),
+          Integer.parseInt(pozycja[1]), Integer.parseInt(pozycja[2]), Integer.parseInt(pozycja[3]));
     } catch (NiepoprawnyRuch ex) {
       System.err.println("Niepoprawny ruch.");
+      wykonano = false;
     }
     
     polRuch.ruch = false;
+    return wykonano;
   }
   
-  private boolean sprawdzCzyNazwaWolna(String nazwa) {
-    for(int i=0; i < polaczenie.size(); i++) {
-      if(nazwa.equals(polaczenie.get(i).podajNazwe())) {
+  private boolean sprawdzCzyNazwaWolna(final String nazwa) {
+    //Czy pokrywa sie z jakimœ graczem
+    for (int i=0; i < polaczenie.size(); i++) {
+      if (nazwa.equals(polaczenie.get(i).podajNazwe())) {
         return false;
       }
     }
+    //Czy pokrywa siê z nazwami botów
+    if (nazwa.equals("Bot1") || nazwa.equals("Bot2") || nazwa.equals("Bot3") ||
+        nazwa.equals("Bot4") || nazwa.equals("Bot5") || nazwa.equals("Bot6")) {
+      return false;
+    }
+    
     return true; 
   }
   
-  public void podajWiadomosc(String wiadomosc) {
+  /**
+   * Aktualizuje wiadomoœc od po³¹czenia.
+   * @param wiadomosc Wiadomoœc od po³¹czenia
+   */
+  public void podajWiadomosc(final String wiadomosc) {
     this.wiadomoscOdPolaczenia = wiadomosc;
+  }
+  
+  /**
+   * Zamyka serwer.
+   */
+  public void zamknijSerwer() {
+    zamkniecieSerwera = true;
+    System.out.println("Zamkniêto serwer.");
+  }
+  
+  private void zamknijSockety() {
+    for (Polaczenie pol: polaczenie) {
+      pol.zamknijPolaczenie();
+    }
+    try {
+      this.socketSerwer.close();
+    } catch (IOException ex) {}
+  }
+  
+  /**
+   * Podaje listê z nazwami aktualnie po³¹czonych graczy.
+   */
+  public List<String> podajListePolaczen() {
+    final List<String> lista = new ArrayList<String>();
+    for (Polaczenie pol: polaczenie) {
+      lista.add(pol.podajNazwe());
+    }
+    return lista;
+  }
+  
+  /**
+   * Podaje czy serwer jest zamkniêty.
+   * @return True je¿eli serwer jest zamkniêty.
+   */
+  public boolean czyZamkniety() {
+    return this.zamkniecieSerwera;
   }
 }

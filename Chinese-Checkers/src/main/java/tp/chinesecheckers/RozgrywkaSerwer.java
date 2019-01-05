@@ -11,4 +11,6 @@ public interface RozgrywkaSerwer {
   public void zamienGraczaNaBota(String nazwa);
   
   public void wykonajRuch(String nazwa, int staryX, int staryY, int nowyX, int nowyY) throws NiepoprawnyRuch;
+  
+  public void wykonajRuchBota(String nazwa);
 }

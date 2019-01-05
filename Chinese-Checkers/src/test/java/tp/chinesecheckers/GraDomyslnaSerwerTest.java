@@ -102,4 +102,94 @@ public class GraDomyslnaSerwerTest {
     assertEquals("Pionek przesuniety", 12, gra.podajListeZawodnikow().get(0).podajPionki().get(8).podajX());
     assertEquals("Pionek przesuniety", 4, gra.podajListeZawodnikow().get(0).podajPionki().get(8).podajY());
   }
+  
+  @Test
+  public void testSprawdzaniaPoprawnosciRuchu() {
+    GraDomyslnaSerwer gra = new GraDomyslnaSerwer();
+    gra.dodajGracza("Gracz1", 0, 2);
+    gra.dodajGracza("Gracz2", 1, 2);
+    
+    
+    boolean err = false;
+    try {
+      gra.wykonajRuch("Gracz1", 12, 0, 13, -1);
+    } catch (NiepoprawnyRuch ex) {
+      err = true;
+    }
+    assertTrue(err);
+    
+    err = false;
+    try {
+      gra.wykonajRuch("Gracz2", 12, 16, 11, 17);
+    } catch (NiepoprawnyRuch ex) {
+      err = true;
+    }
+    assertTrue(err);
+    
+    err = false;
+    try {
+      gra.wykonajRuch("Gracz1", 10, 2, 8, 2);
+    } catch (NiepoprawnyRuch ex) {
+      err = true;
+    }
+    assertTrue(err);
+    
+    err = false;
+    try {
+      gra.wykonajRuch("Gracz1", 13, 3, 13, 4);
+    } catch (NiepoprawnyRuch ex) {
+      err = true;
+    }
+    assertTrue(err);
+    
+    //Sprawdzanie dzialania przeskakiwania
+    
+    err = false;
+    try {
+      gra.wykonajRuch("Gracz1", 15, 3, 14, 4);
+    } catch (NiepoprawnyRuch ex) {
+      err = true;
+    }
+    assertFalse(err);
+    
+    err = false;
+    try {
+      gra.wykonajRuch("Gracz1", 13, 3, 15, 5);
+    } catch (NiepoprawnyRuch ex) {
+      err = true;
+    }
+    assertFalse(err);
+    
+    err = false;
+    try {
+      gra.wykonajRuch("Gracz1", 14, 2, 13, 3);
+    } catch (NiepoprawnyRuch ex) {
+      err = true;
+    }
+    assertFalse(err);
+    
+    err = false;
+    try {
+      gra.wykonajRuch("Gracz1", 15, 5, 14, 6);
+    } catch (NiepoprawnyRuch ex) {
+      err = true;
+    }
+    assertFalse(err);
+    
+    err = false;
+    try {
+      gra.wykonajRuch("Gracz1", 13, 3, 13, 7);
+    } catch (NiepoprawnyRuch ex) {
+      err = true;
+    }
+    assertFalse(err);
+    
+    err = false;
+    try {
+      gra.wykonajRuch("Gracz1", 11, 3, 9, 5);
+    } catch (NiepoprawnyRuch ex) {
+      err = true;
+    }
+    assertTrue(err);
+  }
 }

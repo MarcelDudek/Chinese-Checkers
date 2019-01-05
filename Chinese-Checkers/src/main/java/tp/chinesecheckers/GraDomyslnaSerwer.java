@@ -11,6 +11,8 @@ import tp.chinesecheckers.exception.PionekNaTejPozycjiNieIstnieje;
  *
  */
 public class GraDomyslnaSerwer extends GraDomyslna implements RozgrywkaSerwer {
+  
+  private int iloscZakonczen = 0;
 
   @Override
   /**
@@ -267,7 +269,15 @@ public class GraDomyslnaSerwer extends GraDomyslna implements RozgrywkaSerwer {
       final int nowyX, final int nowyY) throws NiepoprawnyRuch {
     Zawodnik zawodnikRuch = null;
     
-    //TODO Sprawdzenie czy ruch jest poprawny
+    //Je¿eli brak ruchu
+    if (staryX == nowyX && staryY == nowyY) {
+      return;
+    }
+    
+    //Sprawdzenie poprawnoœci ruchu
+    if (!sprawdzPoprawnoscRuchu(nazwa, staryX, staryY, nowyX, nowyY)) {
+      throw new NiepoprawnyRuch();
+    }
     
     //Wykonanie ruchu
     for (int i = 0; i < zawodnik.size(); i++) {
@@ -275,11 +285,66 @@ public class GraDomyslnaSerwer extends GraDomyslna implements RozgrywkaSerwer {
       if (zawodnikRuch.podajNazwe().equals(nazwa)) {
         try {
           zawodnikRuch.przesunPionek(staryX, staryY, nowyX, nowyY);
+          
+          //Sprawdzenie czy zawodnik zakoñczy³ grê
+          if (czyZawodnikZakonczylGre(zawodnikRuch)) {
+            zawodnikRuch.ustawPozycje(iloscZakonczen + 1);
+          }
         } catch (PionekNaTejPozycjiNieIstnieje ex) {
           System.err.println("Pionek na pozycji " + ex.podajX() 
               + ", " + ex.podajY() + " nie istnieje!");
           throw new NiepoprawnyRuch();
         }
+      }
+    }
+  }
+  
+  @Override
+  /**
+   * Wykonuje ruch bota.
+   */
+  public void wykonajRuchBota(String nazwa) {
+    //Znalezienie odpowiedniego zawodnika
+    Zawodnik bot = null;
+    for (Zawodnik zaw: zawodnik) {
+      if (nazwa.equals(zaw.podajNazwe())) {
+        bot = zaw;
+        break;
+      }
+    }
+    if (bot == null) {
+      return;
+    }
+    
+    //Wykonanie ruchu
+    List<Pionek> pionek = bot.podajPionki();
+    List<Pionek> promien = bot.podajPromien();
+    
+    for (int i = 0; i < pionek.size(); i++) {
+      Pionek pion = pionek.get(i);
+      Pionek prom = promien.get(i);
+      
+      if (!(pion.podajX() == prom.podajX() && pion.podajY() == prom.podajY())) {
+        int nowyX = pion.podajX();
+        int nowyY = pion.podajY();
+        
+        if (nowyX < prom.podajX()) {
+          nowyX++;
+        } else {
+          nowyX--;
+        }
+        
+        if (nowyY < prom.podajY()) {
+          nowyY++;
+        } else {
+          nowyY--;
+        }
+        try {
+          wykonajRuch(nazwa, pion.podajX(), pion.podajY(), nowyX, nowyY);
+        } catch (NiepoprawnyRuch ex) {
+          continue;
+        }
+        break;
       }
     }
   }
@@ -296,7 +361,7 @@ public class GraDomyslnaSerwer extends GraDomyslna implements RozgrywkaSerwer {
     for (int i = 0; i < zawodnik.size(); i++) {
       zaw = zawodnik.get(i);
       //znak typu
-      if(zaw instanceof Gracz) {
+      if (zaw instanceof Gracz) {
         wiadomosc += "%G";
       } else {
         wiadomosc += "%B";
@@ -317,5 +382,281 @@ public class GraDomyslnaSerwer extends GraDomyslna implements RozgrywkaSerwer {
     }
     
     return wiadomosc;
+  }
+  
+  private boolean sprawdzPoprawnoscRuchu(final String nazwa, final int staryX,
+      final int staryY, final int nowyX, final int nowyY) {
+    
+    //Sprawdzenie czy nowe polozenie pionka nie wychodzi poza plansze
+    if (nowyX < 0 || nowyX > 24 || nowyY < 0 || nowyY > 16) {
+      return false;
+    }
+    if (nowyY == 0 && (nowyX < 12 || nowyX > 12)) {
+      return false;
+    }
+    if (nowyY == 1 && (nowyX < 11 || nowyX > 13)) {
+      return false;
+    }
+    if (nowyY == 2 && (nowyX < 10 || nowyX > 14)) {
+      return false;
+    }
+    if (nowyY == 3 && (nowyX < 9 || nowyX > 15)) {
+      return false;
+    }
+    if (nowyY == 4 && (nowyX < 0 || nowyX > 24)) {
+      return false;
+    }
+    if (nowyY == 5 && (nowyX < 1 || nowyX > 23)) {
+      return false;
+    }
+    if (nowyY == 6 && (nowyX < 2 || nowyX > 22)) {
+      return false;
+    }
+    if (nowyY == 7 && (nowyX < 3 || nowyX > 21)) {
+      return false;
+    }
+    if (nowyY == 8 && (nowyX < 4 || nowyX > 20)) {
+      return false;
+    }
+    if (nowyY == 9 && (nowyX < 3 || nowyX > 21)) {
+      return false;
+    }
+    if (nowyY == 10 && (nowyX < 2 || nowyX > 22)) {
+      return false;
+    }
+    if (nowyY == 11 && (nowyX < 1 || nowyX > 23)) {
+      return false;
+    }
+    if (nowyY == 12 && (nowyX < 0 || nowyX > 24)) {
+      return false;
+    }
+    if (nowyY == 13 && (nowyX < 9 || nowyX > 15)) {
+      return false;
+    }
+    if (nowyY == 14 && (nowyX < 10 || nowyX > 14)) {
+      return false;
+    }
+    if (nowyY == 15 && (nowyX < 11 || nowyX > 13)) {
+      return false;
+    }
+    if (nowyY == 16 && (nowyX < 12 || nowyX > 12)) {
+      return false;
+    }
+    
+    //Sprawdzenie czy nowe polozenie pionka nie wchodzi pomiedzy pola
+    if (nowyX % 2 != nowyY % 2) {
+      return false;
+    }
+    
+    //Sprawdzenie czy na danej pozycji nie znajduje siê ju¿ inny pionek
+    if (czyNaPozycjiZnajdujeSiePionek(nowyX, nowyY)) {
+      return false;
+    }
+    
+    /* Sprawdzenie czy dany ruch jest w zasiêgu jednego pola,
+     * je¿eli nie jest to, sprawdŸ uruchom rekurencyjnie sprawdzanie
+     * dla pól gdzie mo¿liwe jest przeskoczenie innego piona.
+     */
+    if ((nowyY + 1 == staryY || nowyY - 1 == staryY)
+        && (nowyX + 1 == staryX || nowyX - 1 == staryY)) {
+      return true;
+    }
+    
+    if ((nowyY == staryY) && (nowyX + 2 == staryX || nowyX - 2 == staryX)) {
+      return true;
+    }
+    
+    //Uruchomienie rekurencji
+    return sprawdzMozliwoscSkoku(staryX, staryY, staryX, staryY, nowyX, nowyY); 
+  }
+  
+  private boolean sprawdzMozliwoscSkoku(int skadX, int skadY, int dokadX,
+      int dokadY, int nowyX, int nowyY) {
+    
+    //Sprawdzenie czy nowe polozenie pionka nie wychodzi poza plansze
+    if (skadX < 0 || skadX > 24 || skadY < 0 || skadY > 16) {
+      return false;
+    }
+    if (skadY == 0 && (skadX < 12 || skadX > 12)) {
+      return false;
+    }
+    if (skadY == 1 && (skadX < 11 || skadX > 13)) {
+      return false;
+    }
+    if (skadY == 2 && (skadX < 10 || skadX > 14)) {
+      return false;
+    }
+    if (skadY == 3 && (skadX < 9 || skadX > 15)) {
+      return false;
+    }
+    if (skadY == 4 && (skadX < 0 || skadX > 24)) {
+      return false;
+    }
+    if (skadY == 5 && (skadX < 1 || skadX > 23)) {
+      return false;
+    }
+    if (skadY == 6 && (skadX < 2 || skadX > 22)) {
+      return false;
+    }
+    if (skadY == 7 && (skadX < 3 || skadX > 21)) {
+      return false;
+    }
+    if (skadY == 8 && (skadX < 4 || skadX > 20)) {
+      return false;
+    }
+    if (skadY == 9 && (skadX < 3 || skadX > 21)) {
+      return false;
+    }
+    if (skadY == 10 && (skadX < 2 || skadX > 22)) {
+      return false;
+    }
+    if (skadY == 11 && (skadX < 1 || skadX > 23)) {
+      return false;
+    }
+    if (skadY == 12 && (skadX < 0 || skadX > 24)) {
+      return false;
+    }
+    if (skadY == 13 && (skadX < 9 || skadX > 15)) {
+      return false;
+    }
+    if (skadY == 14 && (skadX < 10 || skadX > 14)) {
+      return false;
+    }
+    if (skadY == 15 && (skadX < 11 || skadX > 13)) {
+      return false;
+    }
+    if (skadY == 16 && (skadX < 12 || skadX > 12)) {
+      return false;
+    }
+    
+    //Sprawdzenie mo¿liwych przeskoków z danej pozycji
+    int pionX = dokadX + 1;
+    int pionY = dokadY - 1;
+    int skokX = pionX + 1;
+    int skokY = pionY - 1;
+    if (czyNaPozycjiZnajdujeSiePionek(pionX, pionY) &&
+        !czyNaPozycjiZnajdujeSiePionek(skokX, skokY)) {
+      if (skokX == nowyX && skokY == nowyY) {
+        return true;
+      } else if (!(skokX == skadX && skokY == skadY)) {
+        if (sprawdzMozliwoscSkoku(dokadX, dokadY, skokX, skokY, nowyX, nowyY)) {
+          return true;
+        }
+      }
+    }
+    
+    pionX = dokadX + 2;
+    pionY = dokadY;
+    skokX = pionX + 2;
+    skokY = pionY;
+    if (czyNaPozycjiZnajdujeSiePionek(pionX, pionY) &&
+        !czyNaPozycjiZnajdujeSiePionek(skokX, skokY)) {
+      if (skokX == nowyX && skokY == nowyY) {
+        return true;
+      } else if (!(skokX == skadX && skokY == skadY)) {
+        if (sprawdzMozliwoscSkoku(dokadX, dokadY, skokX, skokY, nowyX, nowyY)) {
+          return true;
+        }
+      }
+    }
+    
+    pionX = dokadX + 1;
+    pionY = dokadY + 1;
+    skokX = pionX + 1;
+    skokY = pionY + 1;
+    if (czyNaPozycjiZnajdujeSiePionek(pionX, pionY) &&
+        !czyNaPozycjiZnajdujeSiePionek(skokX, skokY)) {
+      if (skokX == nowyX && skokY == nowyY) {
+        return true;
+      } else if (!(skokX == skadX && skokY == skadY)) {
+        if (sprawdzMozliwoscSkoku(dokadX, dokadY, skokX, skokY, nowyX, nowyY)) {
+          return true;
+        }
+      }
+    }
+    
+    pionX = dokadX - 1;
+    pionY = dokadY + 1;
+    skokX = pionX - 1;
+    skokY = pionY + 1;
+    if (czyNaPozycjiZnajdujeSiePionek(pionX, pionY) &&
+        !czyNaPozycjiZnajdujeSiePionek(skokX, skokY)) {
+      if (skokX == nowyX && skokY == nowyY) {
+        return true;
+      } else if (!(skokX == skadX && skokY == skadY)) {
+        if (sprawdzMozliwoscSkoku(dokadX, dokadY, skokX, skokY, nowyX, nowyY)) {
+          return true;
+        }
+      }
+    }
+    
+    pionX = dokadX - 2;
+    pionY = dokadY;
+    skokX = pionX - 2;
+    skokY = pionY;
+    if (czyNaPozycjiZnajdujeSiePionek(pionX, pionY) &&
+        !czyNaPozycjiZnajdujeSiePionek(skokX, skokY)) {
+      if (skokX == nowyX && skokY == nowyY) {
+        return true;
+      } else if (!(skokX == skadX && skokY == skadY)) {
+        if (sprawdzMozliwoscSkoku(dokadX, dokadY, skokX, skokY, nowyX, nowyY)) {
+          return true;
+        }
+      }
+    }
+    
+    pionX = dokadX - 1;
+    pionY = dokadY - 1;
+    skokX = pionX - 1;
+    skokY = pionY - 1;
+    if (czyNaPozycjiZnajdujeSiePionek(pionX, pionY) &&
+        !czyNaPozycjiZnajdujeSiePionek(skokX, skokY)) {
+      if (skokX == nowyX && skokY == nowyY) {
+        return true;
+      } else if (!(skokX == skadX && skokY == skadY)) {
+        if (sprawdzMozliwoscSkoku(dokadX, dokadY, skokX, skokY, nowyX, nowyY)){
+          return true;
+        }
+      }
+    }
+    //Koniec sprawdzania kolejnych pozycji
+    
+    return false;
+  }
+  
+  private boolean czyNaPozycjiZnajdujeSiePionek(int pozycjaX, int pozycjaY) {
+    for (int i = 0; i < zawodnik.size(); i++) {
+      List<Pionek> pionek = zawodnik.get(i).podajPionki();
+      for (int j = 0; j < pionek.size(); j++) {
+        Pionek pion = pionek.get(j);
+        if (pion.podajX() == pozycjaX && pion.podajY() == pozycjaY) {
+          return true;
+        }
+      }
+    }
+    
+    return false;
+  }
+  
+  private boolean czyZawodnikZakonczylGre(Zawodnik zawodnik) {
+    List<Pionek> pionek = zawodnik.podajPionki();
+    List<Pionek> promien = zawodnik.podajPromien();
+    
+    //Sprawdz wszystkie pola promienia
+    boolean znaleziony = false;
+    for (Pionek pion: pionek) {
+      znaleziony = false;
+      for (Pionek prom: promien) {
+        if (pion.podajX() == prom.podajX() && pion.podajY() == prom.podajY()) {
+          znaleziony = true;
+          break;
+        }
+      }
+      if (!znaleziony) {
+        return false;
+      }
+    }
+    
+    return true;
   }
 }
