@@ -115,7 +115,7 @@ public class TworcaGryDomyslnej extends TworcaGry {
         }
         //Dodanie zawodnika do listy
         zawodnik.add(zawodnikPobrany);
-      }
+      }//DO Rozgrywki z graczami dorzuc!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1
     }
   }
   

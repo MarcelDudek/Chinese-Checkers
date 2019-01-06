@@ -21,6 +21,9 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.ScrollPaneConstants;
 
+import tp.chinesecheckers.GraDomyslna;
+import tp.chinesecheckers.TworcaGryDomyslnej;
+import tp.chinesecheckers.exception.NiepoprawnaWiadomosc;
 import tp.chinesecheckers.klient.Klient.OdbiorcaKomunikatow;
 import tp.chinesecheckers.klient.Klient.PrzyciskWyslijListener;
 
@@ -42,7 +45,7 @@ public class Plansza extends JPanel
 
 	ArrayList<Point> punkty = new ArrayList<Point>();
 
-	int iloscGraczy = 4;// musi dostac od serwera wiadomosc z iloscia graczy
+	int iloscGraczy = 6;// musi dostac od serwera wiadomosc z iloscia graczy
 
 	private BufferedImage image;
 
@@ -54,7 +57,8 @@ public class Plansza extends JPanel
 	int Ysrodek;
 
 	Klient wysylaj;
-
+	TworcaGryDomyslnej tworca = new TworcaGryDomyslnej();
+	GraDomyslna gra = new GraDomyslna();
 	public Plansza() {
 		super();
 
@@ -166,6 +170,11 @@ public class Plansza extends JPanel
 
 		wysylaj.punktX = Integer.toString(XpoRuchu);
 		wysylaj.punktY = Integer.toString(YpoRuchu);
+		//probuje naprawic
+
+		
+		//--------------------------------------------------------
+		
 		// wysylaj.doDziela();// jak juz bedzie gotowy serwer to dodamy
 		// odbieranie
 		// ilosci graczy
@@ -184,8 +193,23 @@ public class Plansza extends JPanel
 		;
 	}
 
+	//stworzenie voida, ktory ma za zadanie zabezpieczac wspolrzedne ruchu, 
+	//numerowane jak te podane na GIT'cie
+	public void NamaszczWspolrzedne(int wspX, int wspY)
+	{
+		;
+	}
+	
+	
+	
+	
+	
+	
+	
+	
 	// sprobuje zrobic klienta jako klase wew
 	// _______________________________________________________________________//
+
 
 	public class Klient {
 
@@ -221,13 +245,14 @@ public class Plansza extends JPanel
 			panelGlowny.add(przewijanie);
 			panelGlowny.add(wiadomosc);
 			panelGlowny.add(przyciskWyslij);
+			 
 			konfigurujKomunikacje();
 
 			Thread watekOdbiorcy = new Thread(new OdbiorcaKomunikatow());
 			watekOdbiorcy.start();
 
 			ramka.getContentPane().add(BorderLayout.CENTER, panelGlowny);
-			ramka.setSize(400, 500);
+			ramka.setSize(650, 400);
 			ramka.setVisible(true);
 
 		}
@@ -241,7 +266,7 @@ public class Plansza extends JPanel
 					ex.printStackTrace();
 				}
 
-				wiadomosc.setText(punktX + "/" + punktY);
+				wiadomosc.setText(punktX + "," + punktY);
 				wiadomosc.requestFocus();
 
 			}
