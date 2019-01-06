@@ -169,9 +169,9 @@ public class Plansza extends JPanel
 		repaint();
 		// Klient wysylaj = new Klient();
 
-		NamaszczWspolrzedne(  YpoRuchu);
+		NamaszczWspolrzedne( XpoRuchu, YpoRuchu);
 		
-		wysylaj.punktX = Integer.toString(XpoRuchu);
+		wysylaj.punktX = Integer.toString(XdlaSerwera);
 		wysylaj.punktY = Integer.toString(YdlaSerwera);
 		//probuje naprawic
 
@@ -198,7 +198,7 @@ public class Plansza extends JPanel
 
 	//stworzenie voida, ktory ma za zadanie zabezpieczac wspolrzedne ruchu, 
 	//numerowane jak te podane na GIT'cie
-	public void NamaszczWspolrzedne(  int wspY)
+	public void NamaszczWspolrzedne(int wspX,  int wspY)
 	{
 		
 		for(int i = 0; i<17; i++)
@@ -209,6 +209,13 @@ public class Plansza extends JPanel
 			}
 		}
 		
+		for(int k = 0; k<25; k++)
+		{
+			if(wspX>198 + k*20 && wspX<=218 + k*20)
+			{
+				XdlaSerwera=k;
+			}
+		}
 		
 	}
 	
