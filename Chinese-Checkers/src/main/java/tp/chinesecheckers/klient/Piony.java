@@ -50,11 +50,22 @@ public class Piony {
 		punkty.add(new Point(ptkX4, ptkY4));
 
 		int x1, y1;
-
+		if(IloscGraczy==4)
+		{
+			for (int i = 20; i < 30; i++) {
+				x1 = (int) punkty.get(i).getX();
+				y1 = (int) punkty.get(i).getY();
+				g3d.fillOval(x1, y1, 25, 25);
+			}
+		}
+		else 
+		{
 		for (int i = 0; i < 10; i++) {
 			x1 = (int) punkty.get(i).getX();
 			y1 = (int) punkty.get(i).getY();
 			g3d.fillOval(x1, y1, 25, 25);
+
+			}
 		}
 
 	}
@@ -143,22 +154,12 @@ public class Piony {
 
 		int x1, y1;
 
-		if(IloscGraczy==2)
-		{
-			
-			for (int i = 10; i < 20; i++) {
-				x1 = (int) punkty.get(i).getX();
-				y1 = (int) punkty.get(i).getY();
-				g3d.fillOval(x1, y1, 25, 25);
-			}
-
-			
-		}
-		else if(IloscGraczy==4)
+	 
+		 if(IloscGraczy==4)
 		{
 			
 
-			for (int i = 20; i < 30; i++) {
+			for (int i = 30; i < 40; i++) {
 				x1 = (int) punkty.get(i).getX();
 				y1 = (int) punkty.get(i).getY();
 				g3d.fillOval(x1, y1, 25, 25);
@@ -222,15 +223,7 @@ public class Piony {
 			}
 			
 		}
-		else if(IloscGraczy==4)
-		{
-
-			for (int i = 30; i < 40; i++) {
-				x1 = (int) punkty.get(i).getX();
-				y1 = (int) punkty.get(i).getY();
-				g3d.fillOval(x1, y1, 25, 25);
-			}
-		}
+	 
 		else if(IloscGraczy==6)
 		{
 		
@@ -279,9 +272,26 @@ public class Piony {
 
 		int x1, y1;
 
-		if(IloscGraczy==3)
+		if(IloscGraczy==2)
+		{
+			for (int i = 0; i < 10; i++) {
+				x1 = (int) punkty.get(i).getX();
+				y1 = (int) punkty.get(i).getY();
+				g3d.fillOval(x1, y1, 25, 25);
+			}
+		}
+		else if(IloscGraczy==3)
 		{
 			for (int i = 20; i < 30; i++) {
+				x1 = (int) punkty.get(i).getX();
+				y1 = (int) punkty.get(i).getY();
+				g3d.fillOval(x1, y1, 25, 25);
+			}
+		}
+		else if(IloscGraczy==4)
+		{
+
+			for (int i = 0; i < 10; i++) {
 				x1 = (int) punkty.get(i).getX();
 				y1 = (int) punkty.get(i).getY();
 				g3d.fillOval(x1, y1, 25, 25);
@@ -334,12 +344,31 @@ public class Piony {
 		punkty.add(new Point(ptkX4, ptkY4));
 
 		int x1, y1;
+		if(IloscGraczy==2)
+		{
+			for (int i = 10; i < 20; i++) {
+				x1 = (int) punkty.get(i).getX();
+				y1 = (int) punkty.get(i).getY();
+				g3d.fillOval(x1, y1, 25, 25);
+			}
+		}
+		else if(IloscGraczy==4)
+		{
 
-		for (int i = 50; i < 60; i++) {
-			x1 = (int) punkty.get(i).getX();
-			y1 = (int) punkty.get(i).getY();
-			g3d.fillOval(x1, y1, 25, 25);
+			for (int i = 10; i < 20; i++) {
+				x1 = (int) punkty.get(i).getX();
+				y1 = (int) punkty.get(i).getY();
+				g3d.fillOval(x1, y1, 25, 25);
+			}
+		}
+		else if(IloscGraczy==6)
+		{
+			for (int i = 50; i < 60; i++) {
+				x1 = (int) punkty.get(i).getX();
+				y1 = (int) punkty.get(i).getY();
+				g3d.fillOval(x1, y1, 25, 25);
 
+			}
 		}
 
 	}

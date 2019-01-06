@@ -21,6 +21,9 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.ScrollPaneConstants;
 
+import tp.chinesecheckers.GraDomyslna;
+import tp.chinesecheckers.TworcaGryDomyslnej;
+import tp.chinesecheckers.exception.NiepoprawnaWiadomosc;
 import tp.chinesecheckers.klient.Klient.OdbiorcaKomunikatow;
 import tp.chinesecheckers.klient.Klient.PrzyciskWyslijListener;
 
@@ -42,7 +45,7 @@ public class Plansza extends JPanel
 
 	ArrayList<Point> punkty = new ArrayList<Point>();
 
-	int iloscGraczy = 4;// musi dostac od serwera wiadomosc z iloscia graczy
+	int iloscGraczy = 6;// musi dostac od serwera wiadomosc z iloscia graczy
 
 	private BufferedImage image;
 
@@ -52,12 +55,20 @@ public class Plansza extends JPanel
 	int YpoRuchu = 0;
 	int Xsrodek;
 	int Ysrodek;
-
+	int XdlaSerwera;
+	int YdlaSerwera=0;
+	GraczeIlosc ilu = new GraczeIlosc();
 	Klient wysylaj;
-
+ 
 	public Plansza() {
+		 
 		super();
-
+ 
+		 
+		 
+			 
+		 
+		
 		addMouseListener(this);
 		addMouseMotionListener(this);
 		setPreferredSize(new Dimension(300, 400));
@@ -78,6 +89,7 @@ public class Plansza extends JPanel
 		setPreferredSize(dimension);
 		pionki = new Piony();
 		pionki.IloscGraczy = iloscGraczy;
+	 
 		wysylaj = new Klient();
 		wysylaj.doDziela();
 	}
@@ -88,17 +100,17 @@ public class Plansza extends JPanel
 
 		if (iloscGraczy == 2) {
 
-			pionki.Ustaw_pionki(g2d);
-			pionki.Ustaw_pionki3(g2d);
+			pionki.Ustaw_pionki5(g2d);
+			pionki.Ustaw_pionki6(g2d);
 		} else if (iloscGraczy == 3) {
 			pionki.Ustaw_pionki(g2d);
 			pionki.Ustaw_pionki4(g2d);
 			pionki.Ustaw_pionki5(g2d);
 		} else if (iloscGraczy == 4) {
-			pionki.Ustaw_pionki(g2d);
-			pionki.Ustaw_pionki2(g2d);
-			pionki.Ustaw_pionki3(g2d);// kolejnosc jest istotna w tych warunkach
-			pionki.Ustaw_pionki4(g2d);// bazuja na ifach i petlach for z klasy
+			pionki.Ustaw_pionki5(g2d);
+			pionki.Ustaw_pionki6(g2d);
+			pionki.Ustaw_pionki(g2d);// kolejnosc jest istotna w tych warunkach
+			pionki.Ustaw_pionki3(g2d);// bazuja na ifach i petlach for z klasy
 										// piony
 		} else if (iloscGraczy == 6) {
 			pionki.Ustaw_pionki(g2d);
@@ -109,6 +121,7 @@ public class Plansza extends JPanel
 			pionki.Ustaw_pionki6(g2d);
 
 		}
+		
 		for (Point p : pionki.punkty) {
 			punkty.add(p);
 		}
@@ -164,8 +177,15 @@ public class Plansza extends JPanel
 		repaint();
 		// Klient wysylaj = new Klient();
 
-		wysylaj.punktX = Integer.toString(XpoRuchu);
-		wysylaj.punktY = Integer.toString(YpoRuchu);
+		NamaszczWspolrzedne( XpoRuchu, YpoRuchu);
+		
+		wysylaj.punktX = Integer.toString(XdlaSerwera);
+		wysylaj.punktY = Integer.toString(YdlaSerwera);
+		//probuje naprawic
+
+		
+		//--------------------------------------------------------
+		
 		// wysylaj.doDziela();// jak juz bedzie gotowy serwer to dodamy
 		// odbieranie
 		// ilosci graczy
@@ -184,8 +204,82 @@ public class Plansza extends JPanel
 		;
 	}
 
+	//stworzenie voida, ktory ma za zadanie zabezpieczac wspolrzedne ruchu, 
+	//numerowane jak te podane na GIT'cie
+	public void NamaszczWspolrzedne(int wspX,  int wspY)
+	{
+		
+		for(int i = 0; i<17; i++)
+		{
+			if(wspY>577 - i*35 && wspY<=615 -i*35)
+			{
+				YdlaSerwera=i;
+			}
+		}
+		
+		for(int k = 0; k<25; k++)
+		{
+			if(wspX>198 + k*20 && wspX<=218 + k*20)
+			{
+				XdlaSerwera=k;
+			}
+		}
+		
+	}
+	
+	
+	
+	
+	
+	
+	public class GraczeIlosc{
+		
+		JLabel polecenie;
+		JTextField informacja;
+		Frame ramka;
+		
+		
+		public void doDziela() {
+			JFrame ramka = new JFrame("Ilosc Graczy");
+			JPanel panelGlowny = new JPanel();
+ 
+ 
+			polecenie = new JLabel("Ilu Graczy?");
+			informacja = new JTextField(20);
+
+			JButton przyciskWyslij = new JButton("Wyslij");
+			przyciskWyslij.addActionListener(new PrzyciskWyslijListener());
+
+			panelGlowny.add(polecenie);
+			panelGlowny.add(informacja);
+			panelGlowny.add(przyciskWyslij);
+			 
+		 
+
+	 
+
+			ramka.getContentPane().add(BorderLayout.CENTER, panelGlowny);
+			ramka.setSize(400, 300);
+			ramka.setVisible(true);
+
+		}
+
+		public class PrzyciskWyslijListener implements ActionListener {
+			public void actionPerformed(ActionEvent ev) {
+	 
+
+				 iloscGraczy = Integer.parseInt(informacja.getText());
+
+			}
+		}
+
+		
+		
+	}
+	
 	// sprobuje zrobic klienta jako klase wew
 	// _______________________________________________________________________//
+
 
 	public class Klient {
 
@@ -221,13 +315,14 @@ public class Plansza extends JPanel
 			panelGlowny.add(przewijanie);
 			panelGlowny.add(wiadomosc);
 			panelGlowny.add(przyciskWyslij);
+			 
 			konfigurujKomunikacje();
 
 			Thread watekOdbiorcy = new Thread(new OdbiorcaKomunikatow());
 			watekOdbiorcy.start();
 
 			ramka.getContentPane().add(BorderLayout.CENTER, panelGlowny);
-			ramka.setSize(400, 500);
+			ramka.setSize(650, 400);
 			ramka.setVisible(true);
 
 		}
@@ -241,7 +336,7 @@ public class Plansza extends JPanel
 					ex.printStackTrace();
 				}
 
-				wiadomosc.setText(punktX + "/" + punktY);
+				wiadomosc.setText(punktX + "," + punktY);
 				wiadomosc.requestFocus();
 
 			}

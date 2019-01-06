@@ -15,7 +15,7 @@ public class RamkaPlanszy extends JFrame {
 	public RamkaPlanszy() {
 		super("Program obrazkowy");
 
-		  
+		plansza.ilu.doDziela();
 		
 
 		add(plansza);
