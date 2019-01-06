@@ -57,12 +57,18 @@ public class Plansza extends JPanel
 	int Ysrodek;
 	int XdlaSerwera;
 	int YdlaSerwera=0;
-
+	GraczeIlosc ilu = new GraczeIlosc();
 	Klient wysylaj;
  
 	public Plansza() {
+		 
 		super();
-
+ 
+		 
+		 
+			 
+		 
+		
 		addMouseListener(this);
 		addMouseMotionListener(this);
 		setPreferredSize(new Dimension(300, 400));
@@ -83,6 +89,7 @@ public class Plansza extends JPanel
 		setPreferredSize(dimension);
 		pionki = new Piony();
 		pionki.IloscGraczy = iloscGraczy;
+	 
 		wysylaj = new Klient();
 		wysylaj.doDziela();
 	}
@@ -114,6 +121,7 @@ public class Plansza extends JPanel
 			pionki.Ustaw_pionki6(g2d);
 
 		}
+		
 		for (Point p : pionki.punkty) {
 			punkty.add(p);
 		}
@@ -224,7 +232,50 @@ public class Plansza extends JPanel
 	
 	
 	
-	
+	public class GraczeIlosc{
+		
+		JLabel polecenie;
+		JTextField informacja;
+		Frame ramka;
+		
+		
+		public void doDziela() {
+			JFrame ramka = new JFrame("Ilosc Graczy");
+			JPanel panelGlowny = new JPanel();
+ 
+ 
+			polecenie = new JLabel("Ilu Graczy?");
+			informacja = new JTextField(20);
+
+			JButton przyciskWyslij = new JButton("Wyslij");
+			przyciskWyslij.addActionListener(new PrzyciskWyslijListener());
+
+			panelGlowny.add(polecenie);
+			panelGlowny.add(informacja);
+			panelGlowny.add(przyciskWyslij);
+			 
+		 
+
+	 
+
+			ramka.getContentPane().add(BorderLayout.CENTER, panelGlowny);
+			ramka.setSize(400, 300);
+			ramka.setVisible(true);
+
+		}
+
+		public class PrzyciskWyslijListener implements ActionListener {
+			public void actionPerformed(ActionEvent ev) {
+	 
+
+				 iloscGraczy = Integer.parseInt(informacja.getText());
+
+			}
+		}
+
+		
+		
+	}
 	
 	// sprobuje zrobic klienta jako klase wew
 	// _______________________________________________________________________//
