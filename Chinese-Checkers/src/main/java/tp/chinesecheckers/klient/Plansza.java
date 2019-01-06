@@ -55,10 +55,11 @@ public class Plansza extends JPanel
 	int YpoRuchu = 0;
 	int Xsrodek;
 	int Ysrodek;
+	int XdlaSerwera;
+	int YdlaSerwera=0;
 
 	Klient wysylaj;
-	TworcaGryDomyslnej tworca = new TworcaGryDomyslnej();
-	GraDomyslna gra = new GraDomyslna();
+ 
 	public Plansza() {
 		super();
 
@@ -168,8 +169,10 @@ public class Plansza extends JPanel
 		repaint();
 		// Klient wysylaj = new Klient();
 
+		NamaszczWspolrzedne(  YpoRuchu);
+		
 		wysylaj.punktX = Integer.toString(XpoRuchu);
-		wysylaj.punktY = Integer.toString(YpoRuchu);
+		wysylaj.punktY = Integer.toString(YdlaSerwera);
 		//probuje naprawic
 
 		
@@ -195,9 +198,18 @@ public class Plansza extends JPanel
 
 	//stworzenie voida, ktory ma za zadanie zabezpieczac wspolrzedne ruchu, 
 	//numerowane jak te podane na GIT'cie
-	public void NamaszczWspolrzedne(int wspX, int wspY)
+	public void NamaszczWspolrzedne(  int wspY)
 	{
-		;
+		
+		for(int i = 0; i<17; i++)
+		{
+			if(wspY>577 - i*35 && wspY<=615 -i*35)
+			{
+				YdlaSerwera=i;
+			}
+		}
+		
+		
 	}
 	
 	
