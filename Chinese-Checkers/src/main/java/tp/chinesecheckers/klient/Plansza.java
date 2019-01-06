@@ -100,17 +100,17 @@ public class Plansza extends JPanel
 
 		if (iloscGraczy == 2) {
 
-			pionki.Ustaw_pionki(g2d);
-			pionki.Ustaw_pionki3(g2d);
+			pionki.Ustaw_pionki5(g2d);
+			pionki.Ustaw_pionki6(g2d);
 		} else if (iloscGraczy == 3) {
 			pionki.Ustaw_pionki(g2d);
 			pionki.Ustaw_pionki4(g2d);
 			pionki.Ustaw_pionki5(g2d);
 		} else if (iloscGraczy == 4) {
-			pionki.Ustaw_pionki(g2d);
-			pionki.Ustaw_pionki2(g2d);
-			pionki.Ustaw_pionki3(g2d);// kolejnosc jest istotna w tych warunkach
-			pionki.Ustaw_pionki4(g2d);// bazuja na ifach i petlach for z klasy
+			pionki.Ustaw_pionki5(g2d);
+			pionki.Ustaw_pionki6(g2d);
+			pionki.Ustaw_pionki(g2d);// kolejnosc jest istotna w tych warunkach
+			pionki.Ustaw_pionki3(g2d);// bazuja na ifach i petlach for z klasy
 										// piony
 		} else if (iloscGraczy == 6) {
 			pionki.Ustaw_pionki(g2d);
