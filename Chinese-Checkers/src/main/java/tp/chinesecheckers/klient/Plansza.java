@@ -55,8 +55,11 @@ public class Plansza extends JPanel
 	int YpoRuchu = 0;
 	int Xsrodek;
 	int Ysrodek;
-	int XdlaSerwera;
+	int XdlaSerwera=0;
 	int YdlaSerwera=0;
+	int XprzedRuchem=0;
+	int YprzedRuchem=0;
+	
 	GraczeIlosc ilu = new GraczeIlosc();
 	Klient wysylaj;
  
@@ -144,6 +147,9 @@ public class Plansza extends JPanel
 		int y = 0;
 		x = e.getX();
 		y = e.getY();
+		XprzedRuchem = e.getX();
+		YprzedRuchem = e.getY();
+		NamaszczWspolrzednePrzed( XprzedRuchem, YprzedRuchem);
 		int x2, y2;
 
 		if (e.getButton() != MouseEvent.BUTTON3) {
@@ -181,6 +187,8 @@ public class Plansza extends JPanel
 		
 		wysylaj.punktX = Integer.toString(XdlaSerwera);
 		wysylaj.punktY = Integer.toString(YdlaSerwera);
+		wysylaj.punktXprzed = Integer.toString(XprzedRuchem);
+		wysylaj.punktYprzed = Integer.toString(YprzedRuchem);
 		//probuje naprawic
 
 		
@@ -226,8 +234,31 @@ public class Plansza extends JPanel
 		}
 		
 	}
-	
-	
+	public void NamaszczWspolrzednePrzed(int wspX,  int wspY)
+	{
+		
+		for(int i = 0; i<17; i++)
+		{
+			if(wspY>577 - i*35 && wspY<=615 -i*35)
+			{
+				YprzedRuchem=i;
+			}
+		}
+		
+		for(int k = 0; k<25; k++)
+		{
+			if(wspX>198 + k*20 && wspX<=218 + k*20)
+			{
+				XprzedRuchem=k;
+			}
+		}
+		
+	}
+	//void odpowiedzialny za sprawdzanie przesuniec pionow
+	public void SprawdzZmiane()
+	{
+		;
+	}
 	
 	
 	
@@ -291,6 +322,9 @@ public class Plansza extends JPanel
 		Frame ramka;
 		String punktX;
 		String punktY;
+		String punktXprzed;
+		String punktYprzed;
+
 
 		public void doDziela() {
 			JFrame ramka = new JFrame("Klient Wiadomosci");
@@ -336,7 +370,7 @@ public class Plansza extends JPanel
 					ex.printStackTrace();
 				}
 
-				wiadomosc.setText(punktX + "," + punktY);
+				wiadomosc.setText(punktXprzed+","+punktYprzed+"&"+punktX + "," + punktY);
 				wiadomosc.requestFocus();
 
 			}
