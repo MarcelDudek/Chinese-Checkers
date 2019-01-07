@@ -60,6 +60,8 @@ public class Plansza extends JPanel
 	int XprzedRuchem=0;
 	int YprzedRuchem=0;
 	
+	String wiadom;//od serwera
+	
 	GraczeIlosc ilu = new GraczeIlosc();
 	Klient wysylaj;
  
@@ -189,6 +191,7 @@ public class Plansza extends JPanel
 		wysylaj.punktY = Integer.toString(YdlaSerwera);
 		wysylaj.punktXprzed = Integer.toString(XprzedRuchem);
 		wysylaj.punktYprzed = Integer.toString(YprzedRuchem);
+		SprawdzZmiane();
 		//probuje naprawic
 
 		
@@ -257,7 +260,7 @@ public class Plansza extends JPanel
 	//void odpowiedzialny za sprawdzanie przesuniec pionow
 	public void SprawdzZmiane()
 	{
-		;
+		System.out.println(wiadom);;
 	}
 	
 	
@@ -370,7 +373,7 @@ public class Plansza extends JPanel
 					ex.printStackTrace();
 				}
 
-				wiadomosc.setText(punktXprzed+","+punktYprzed+"&"+punktX + "," + punktY);
+				wiadomosc.setText(punktXprzed+","+punktYprzed+","+punktX + "," + punktY);
 				wiadomosc.requestFocus();
 
 			}
@@ -389,10 +392,10 @@ public class Plansza extends JPanel
 
 			}
 		}
-
+//zajmij sie t¹ czescia aby odebrac dane pionkow
 		public class OdbiorcaKomunikatow implements Runnable {
 			public void run() {
-				String wiadom;
+				//String wiadom;
 				try {
 					while ((wiadom = czytelnik.readLine()) != null) {
 						// System.out.println("Odczytano: " + wiadom);
