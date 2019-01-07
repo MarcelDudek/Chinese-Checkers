@@ -260,7 +260,7 @@ public class Plansza extends JPanel
 	//void odpowiedzialny za sprawdzanie przesuniec pionow
 	public void SprawdzZmiane()
 	{
-		System.out.println(wiadom);;
+		System.out.println(wiadom);
 	}
 	
 	
