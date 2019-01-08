@@ -77,7 +77,7 @@ public class Plansza extends JPanel
 	int Yzwrotne=0;
 	int Xzwrotne=0;
 	boolean FlagaLogicznaDoPlanszy = false;
-	
+	boolean FlagaLogicznaDoPlanszy2 = false;
 	String wiadom;//od serwera
 	ArrayList<String> ruchyZserwera2 = new ArrayList<String>();
 	String [] ruchyZserwera=null;
@@ -122,11 +122,11 @@ public class Plansza extends JPanel
 
 	public void paintComponent(Graphics g) {
 		
-		if(FlagaLogicznaDoPlanszy == true)
-		{
+		 
 		Graphics2D g2d = (Graphics2D) g;
 		g2d.drawImage(image, 0, 0, this);
-
+		if(FlagaLogicznaDoPlanszy == true)
+		{
 		OperujSerwerem();
 		
 		if (iloscGraczy == 2) {
@@ -160,8 +160,10 @@ public class Plansza extends JPanel
 			for (Point p : pionki.punkty) {
 				punkty.add(p);
 			}
+			 
 		}
-		 pionki.punkty.removeAll(punkty);
+	  
+		 
 	}
 
 	public void mouseClicked(MouseEvent e) {
@@ -416,7 +418,7 @@ public class Plansza extends JPanel
 			    	}
 			    	
 			    }
-			    
+			   
 			    
 			    
 			    //----------------------------------petla bedzie chyba potrzebna
@@ -482,7 +484,7 @@ public class Plansza extends JPanel
 
 				 iloscGraczy = Integer.parseInt(informacja.getText());
 				 repaint();
-
+				 
 			}
 		}
 
@@ -765,10 +767,15 @@ public class Plansza extends JPanel
 				} catch (Exception ex) {
 					ex.printStackTrace();
 				}
-
+				 pionki.punkty.removeAll(punkty);
 		 
 				wiadomosc.requestFocus();
-				 
+				 if(FlagaLogicznaDoPlanszy==true)
+				 {
+					 repaint();
+					pionki.punkty.clear();
+					punkty.clear();
+				 }
 				 
 			 
 			}
@@ -799,7 +806,7 @@ public class Plansza extends JPanel
 						{
 							System.out.println("Mozna tworzyc plansze");
 							FlagaLogicznaDoPlanszy = true;
-					 
+							 
  						 
 						}
 					 
