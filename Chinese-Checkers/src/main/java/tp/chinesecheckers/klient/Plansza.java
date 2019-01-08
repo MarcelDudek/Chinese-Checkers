@@ -23,7 +23,9 @@ import javax.swing.JTextField;
 import javax.swing.ScrollPaneConstants;
 
 import tp.chinesecheckers.GraDomyslna;
+import tp.chinesecheckers.Pionek;
 import tp.chinesecheckers.TworcaGryDomyslnej;
+import tp.chinesecheckers.Zawodnik;
 import tp.chinesecheckers.exception.NiepoprawnaWiadomosc;
 import tp.chinesecheckers.klient.Klient.OdbiorcaKomunikatow;
 import tp.chinesecheckers.klient.Klient.PrzyciskWyslijListener;
@@ -227,7 +229,7 @@ public class Plansza extends JPanel
 			    } catch (NiepoprawnaWiadomosc e2) {}
 	    GraDomyslna gra = (GraDomyslna)tworca.stworzGre();
 	    
-	    
+	     
 	    String nazwaGracza;  
 	    int runda;  
 		
@@ -236,6 +238,29 @@ public class Plansza extends JPanel
 		
 		nazwaGracza = gra.podajKtoWykonujeRuch();
 	    runda = gra.podajRunde();
+	    //teraz czesc, z ktorej musze wymyslic jak rozkladac pionki przy pom serwera
+	    ArrayList<Zawodnik> zawodnicy = (ArrayList<Zawodnik>) gra.podajListeZawodnikow();
+	    
+	 //   Zawodnik przykladowyZawodnik = zawodnicy.get(0);
+	 //   ArrayList<Pionek> pionki = (ArrayList<Pionek>) przykladowyZawodnik.podajPionki();
+	 //   Pionek przykladowyPionek = pionki.get(0);
+	 //   int x = przykladowyPionek.podajX();
+	 //   int y = przykladowyPionek.podajY();
+	    
+	    for( Zawodnik k : zawodnicy)
+	    {
+	    	
+	    	for(Pionek p : k.podajPionki())
+	    	{
+	    		System.out.println(p.podajX());
+	    		System.out.println(p.podajY());
+	    	}
+	    	
+	    }
+	    
+	    
+	    
+	    //----------------------------------petla bedzie chyba potrzebna
 	    System.out.println(wiadom);
 	    System.out.println(nazwaGracza);
 	    System.out.println(runda);
