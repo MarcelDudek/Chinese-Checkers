@@ -11,6 +11,7 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import javax.imageio.ImageIO;
 import javax.swing.JButton;
@@ -61,6 +62,8 @@ public class Plansza extends JPanel
 	int YprzedRuchem=0;
 	
 	String wiadom;//od serwera
+	ArrayList<String> ruchyZserwera2 = new ArrayList<String>();
+	String [] ruchyZserwera=null;
 	
 	GraczeIlosc ilu = new GraczeIlosc();
 	Klient wysylaj;
@@ -191,7 +194,7 @@ public class Plansza extends JPanel
 		wysylaj.punktY = Integer.toString(YdlaSerwera);
 		wysylaj.punktXprzed = Integer.toString(XprzedRuchem);
 		wysylaj.punktYprzed = Integer.toString(YprzedRuchem);
-		SprawdzZmiane();
+		 
 		//probuje naprawic
 
 		
@@ -222,7 +225,7 @@ public class Plansza extends JPanel
 		
 		for(int i = 0; i<17; i++)
 		{
-			if(wspY>577 - i*35 && wspY<=615 -i*35)
+			if(wspY>17 + i*35 && wspY<=55 +i*35)
 			{
 				YdlaSerwera=i;
 			}
@@ -242,7 +245,7 @@ public class Plansza extends JPanel
 		
 		for(int i = 0; i<17; i++)
 		{
-			if(wspY>577 - i*35 && wspY<=615 -i*35)
+			if(wspY>17 + i*35 && wspY<=55 +i*35)
 			{
 				YprzedRuchem=i;
 			}
@@ -258,12 +261,22 @@ public class Plansza extends JPanel
 		
 	}
 	//void odpowiedzialny za sprawdzanie przesuniec pionow
-	public void SprawdzZmiane()
+ 
+	
+	public void SprawdzZmiane()//PROBLEM Z TA METODA
 	{
-		System.out.println(wiadom);
+		 
+		 
+		ruchyZserwera = wiadom.split("&");
+		//System.out.println(Arrays.toString(ruchyZserwera));
+		for(String s :(ruchyZserwera))
+		{
+		 ruchyZserwera2.add(s);
+		}
+	 
+			
+		System.out.println(ruchyZserwera2);
 	}
-	
-	
 	
 	
 	public class GraczeIlosc{
