@@ -52,6 +52,18 @@ public class Plansza extends JPanel
 
 	Piony pionki;
 
+	//rozpoczynamy wyciaganie informacji z serwera
+	
+ /*   TworcaGryDomyslnej tworca = new TworcaGryDomyslnej();
+    GraDomyslna gra = (GraDomyslna)tworca.stworzGre();
+    
+    
+    String nazwaGracza;  
+    int runda; */ 
+    //-----------------------------------------------------
+	
+	
+	
 	int XpoRuchu = 0;
 	int YpoRuchu = 0;
 	int Xsrodek;
@@ -205,6 +217,30 @@ public class Plansza extends JPanel
 		// ilosci graczy
 		// poniewaz klient jest klasa wewn, nie bedzie problemu z wymiana danych
 
+		//-----------------------------------------------------------
+		//ZASADNICZO NA DOBREJ DRODZE 
+
+	    TworcaGryDomyslnej tworca = new TworcaGryDomyslnej();
+
+		   try {
+			      tworca.zaladujGreZWiadomosci(wiadom);
+			    } catch (NiepoprawnaWiadomosc e2) {}
+	    GraDomyslna gra = (GraDomyslna)tworca.stworzGre();
+	    
+	    
+	    String nazwaGracza;  
+	    int runda;  
+		
+		 
+		 //wciz czesc o ktorej rozmawialismy
+		
+		nazwaGracza = gra.podajKtoWykonujeRuch();
+	    runda = gra.podajRunde();
+	    System.out.println(wiadom);
+	    System.out.println(nazwaGracza);
+	    System.out.println(runda);
+		
+		
 	}
 	public void mouseDragged(MouseEvent e) {
 		if (movingPoint != null) {
@@ -413,11 +449,14 @@ public class Plansza extends JPanel
 					while ((wiadom = czytelnik.readLine()) != null) {
 						// System.out.println("Odczytano: " + wiadom);
 						odebraneWiadomosci.append(wiadom + "\n");
-
+						 
 					}
 				} catch (Exception ex) {
 					ex.printStackTrace();
 				}
+				 
+			 
+				    
 			}
 
 		}
