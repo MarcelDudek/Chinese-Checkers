@@ -1,17 +1,25 @@
 package tp.chinesecheckers.klient;
 
-import java.awt.*;
-import java.awt.event.*;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Frame;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.Point;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
 import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 import javax.imageio.ImageIO;
 import javax.swing.JButton;
@@ -27,23 +35,49 @@ import tp.chinesecheckers.Pionek;
 import tp.chinesecheckers.TworcaGryDomyslnej;
 import tp.chinesecheckers.Zawodnik;
 import tp.chinesecheckers.exception.NiepoprawnaWiadomosc;
-import tp.chinesecheckers.klient.Klient.OdbiorcaKomunikatow;
-import tp.chinesecheckers.klient.Klient.PrzyciskWyslijListener;
+import tp.chinesecheckers.klient.Plansza.GraczeIlosc;
+import tp.chinesecheckers.klient.Plansza.Klient;
+import tp.chinesecheckers.klient.Plansza.Piony;
+import tp.chinesecheckers.klient.Plansza.Klient.OdbiorcaKomunikatow;
+import tp.chinesecheckers.klient.Plansza.Klient.PrzyciskWyslijListener;
 
-//proba
-import java.io.*;
-import java.net.*;
-import javax.swing.*;
+public class Klient2 extends JPanel
+implements
+MouseListener,
+MouseMotionListener{
 
-import java.awt.*;
-import java.awt.event.*;
-
-public class Plansza extends JPanel
-		implements
-			MouseListener,
-			MouseMotionListener {
-
-	private static final long serialVersionUID = 1L;
+	JTextArea odebraneWiadomosci;
+	JTextField wiadomosc;
+	BufferedReader czytelnik;
+	PrintWriter pisarz;
+	Socket gniazdo;
+	Frame ramka;
+	String punktX;
+	String punktY;
+	String punktXprzed;
+	String punktYprzed;
+	String wiadom;
+	boolean FlagaLogicznaDoPlanszy = false;
+	
+	
+	public static void main(String[] args) {
+		
+		Klient2 k2 = new Klient2();
+		k2.doDziela();
+		k2.Rozpocznij();
+	}
+	
+	//==================================================
+	public void Rozpocznij()
+	{
+		if( FlagaLogicznaDoPlanszy == true)
+		{
+			 new RamkaPlanszy();
+			OperujSerwerem();
+			repaint();
+		}
+	}
+	
 	Point movingPoint = null;
 
 	ArrayList<Point> punkty = new ArrayList<Point>();
@@ -53,19 +87,7 @@ public class Plansza extends JPanel
 	private BufferedImage image;
 
 	Piony pionki;
-
-	//rozpoczynamy wyciaganie informacji z serwera
-	
- /*   TworcaGryDomyslnej tworca = new TworcaGryDomyslnej();
-    GraDomyslna gra = (GraDomyslna)tworca.stworzGre();
-    
-    
-    String nazwaGracza;  
-    int runda; */ 
-    //-----------------------------------------------------
-	
-	
-	
+ 
 	int XpoRuchu = 0;
 	int YpoRuchu = 0;
 	int Xsrodek;
@@ -76,24 +98,19 @@ public class Plansza extends JPanel
 	int YprzedRuchem=0;
 	int Yzwrotne=0;
 	int Xzwrotne=0;
-	boolean FlagaLogicznaDoPlanszy = false;
 	
-	String wiadom;//od serwera
+	 
 	ArrayList<String> ruchyZserwera2 = new ArrayList<String>();
 	String [] ruchyZserwera=null;
 	
-	GraczeIlosc ilu = new GraczeIlosc();
+ 
 	Klient wysylaj;
  
-	public Plansza() {
+	public Klient2() {
 		 
 		super();
  
-		 
-		 
-			 
-		 
-		
+ 
 		addMouseListener(this);
 		addMouseMotionListener(this);
 		setPreferredSize(new Dimension(300, 400));
@@ -114,16 +131,10 @@ public class Plansza extends JPanel
 		setPreferredSize(dimension);
 		pionki = new Piony();
 		pionki.IloscGraczy = iloscGraczy;
-	 
-		wysylaj = new Klient();
-		wysylaj.doDziela();
-		 
+	 		 		 
 	}
 
 	public void paintComponent(Graphics g) {
-		
-		if(FlagaLogicznaDoPlanszy == true)
-		{
 		Graphics2D g2d = (Graphics2D) g;
 		g2d.drawImage(image, 0, 0, this);
 
@@ -157,11 +168,10 @@ public class Plansza extends JPanel
 	 
 			  
 			 
-			for (Point p : pionki.punkty) {
-				punkty.add(p);
-			}
+		for (Point p : pionki.punkty) {
+			punkty.add(p);
 		}
-		 pionki.punkty.removeAll(punkty);
+
 	}
 
 	public void mouseClicked(MouseEvent e) {
@@ -216,7 +226,7 @@ public class Plansza extends JPanel
 		XpoRuchu = e.getX();// te wspolrzedne beda wysylane do serwera
 		YpoRuchu = e.getY();
 		 
-		// Klient wysylaj = new Klient();
+ 
 
 		NamaszczWspolrzedne( XpoRuchu, YpoRuchu);
 		
@@ -226,74 +236,9 @@ public class Plansza extends JPanel
 		wysylaj.punktYprzed = Integer.toString(YprzedRuchem);
 		wysylaj.wiadomosc.setText(wysylaj.punktXprzed+","+wysylaj.punktYprzed+","+wysylaj.punktX + "," + wysylaj.punktY);
 		 
-		//probuje naprawic
-
-		
-		//--------------------------------------------------------
-		
-		// wysylaj.doDziela();// jak juz bedzie gotowy serwer to dodamy
-		// odbieranie
-		// ilosci graczy
-		// poniewaz klient jest klasa wewn, nie bedzie problemu z wymiana danych
-
-		//-----------------------------------------------------------
-		//ZASADNICZO NA DOBREJ DRODZE 
-
-	/*    TworcaGryDomyslnej tworca = new TworcaGryDomyslnej();
-
-		   try {
-			      tworca.zaladujGreZWiadomosci(wiadom);
-			    } catch (NiepoprawnaWiadomosc e2) {}
-	    GraDomyslna gra = (GraDomyslna)tworca.stworzGre();
-	    
+ 
 	     
-	    String nazwaGracza;  
-	    int runda;  
-		
-		 
-		 //wciz czesc o ktorej rozmawialismy
-		
-		nazwaGracza = gra.podajKtoWykonujeRuch();
-	    runda = gra.podajRunde();
-	    //teraz czesc, z ktorej musze wymyslic jak rozkladac pionki przy pom serwera
-	    ArrayList<Zawodnik> zawodnicy = (ArrayList<Zawodnik>) gra.podajListeZawodnikow();
-	    
-	 //   Zawodnik przykladowyZawodnik = zawodnicy.get(0);
-	 //   ArrayList<Pionek> pionki = (ArrayList<Pionek>) przykladowyZawodnik.podajPionki();
-	 //   Pionek przykladowyPionek = pionki.get(0);
-	 //   int x = przykladowyPionek.podajX();
-	 //   int y = przykladowyPionek.podajY();
-	    
-	    
-	    punkty.clear();
-	    for( Zawodnik k : zawodnicy)
-	    {
-	    	
-	    	for(Pionek p : k.podajPionki())
-	    	{
-	    		
-	    		NamaszczenieZwrotne(p.podajX(),p.podajY());
-	    		punkty.add(new Point(Xzwrotne,Yzwrotne)); 
-	    		  
-	    		System.out.println(p.podajX());//pomysl jak zrepaintowac
-	    		System.out.println(p.podajY());
-	    		System.out.println(Xzwrotne);
-	    		System.out.println(Yzwrotne);
-	    	}
-	    	
-	    }
-	    
-	    
-	    
-	    //----------------------------------petla bedzie chyba potrzebna
-	    System.out.println(wiadom);
-	    System.out.println(nazwaGracza);
-	    System.out.println(runda);
-	     */
-	 
-	  
 	     repaint();
-	      
 	}
 	public void mouseDragged(MouseEvent e) {
 		if (movingPoint != null) {
@@ -372,7 +317,7 @@ public class Plansza extends JPanel
 	}
 	public void OperujSerwerem()
 	{
-		//-----------------------------------------------------------
+		 
 				//ZASADNICZO NA DOBREJ DRODZE 
 
 			    TworcaGryDomyslnej tworca = new TworcaGryDomyslnej();
@@ -381,24 +326,11 @@ public class Plansza extends JPanel
 					      tworca.zaladujGreZWiadomosci(wiadom);
 					    } catch (NiepoprawnaWiadomosc e2) {}
 			    GraDomyslna gra = (GraDomyslna)tworca.stworzGre();
-			    
-			     
-			 
-				 
-				 //wciz czesc o ktorej rozmawialismy
-				
-		 
+ 
 			    //teraz czesc, z ktorej musze wymyslic jak rozkladac pionki przy pom serwera
 			    ArrayList<Zawodnik> zawodnicy = (ArrayList<Zawodnik>) gra.podajListeZawodnikow();
 			    
-			 //   Zawodnik przykladowyZawodnik = zawodnicy.get(0);
-			 //   ArrayList<Pionek> pionki = (ArrayList<Pionek>) przykladowyZawodnik.podajPionki();
-			 //   Pionek przykladowyPionek = pionki.get(0);
-			 //   int x = przykladowyPionek.podajX();
-			 //   int y = przykladowyPionek.podajY();
-			    
 			    iloscGraczy = zawodnicy.size();
-			 
 	    		 
 			    for( Zawodnik k : zawodnicy)
 			    {
@@ -416,89 +348,109 @@ public class Plansza extends JPanel
 			    	}
 			    	
 			    }
-			    
-			    
-			    
-			    //----------------------------------petla bedzie chyba potrzebna
+ 
 			   
 			    
 	}
 	
-	
-	//void odpowiedzialny za sprawdzanie przesuniec pionow
  
-	
-	public void SprawdzZmiane()//PROBLEM Z TA METODA
-	{
+	//======================================================
+	public void doDziela() {
+		JFrame ramka = new JFrame("Klient Wiadomosci");
+		JPanel panelGlowny = new JPanel();
+
+		odebraneWiadomosci = new JTextArea(15, 50);
+		odebraneWiadomosci.setLineWrap(true);
+		odebraneWiadomosci.setWrapStyleWord(true);
+		odebraneWiadomosci.setEditable(false);
+
+		JScrollPane przewijanie = new JScrollPane(odebraneWiadomosci);
+		przewijanie.setVerticalScrollBarPolicy(
+				ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+		przewijanie.setHorizontalScrollBarPolicy(
+				ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+
+		wiadomosc = new JTextField(20);
+
+		JButton przyciskWyslij = new JButton("Wyslij");
+		przyciskWyslij.addActionListener(new PrzyciskWyslijListener());
+
+		panelGlowny.add(przewijanie);
+		panelGlowny.add(wiadomosc);
+		panelGlowny.add(przyciskWyslij);
 		 
-		 
-		ruchyZserwera = wiadom.split("&");
-		//System.out.println(Arrays.toString(ruchyZserwera));
-		for(String s :(ruchyZserwera))
-		{
-		 ruchyZserwera2.add(s);
-		}
-	 
-			
-		System.out.println(ruchyZserwera2);
+		konfigurujKomunikacje();
+
+		Thread watekOdbiorcy = new Thread(new OdbiorcaKomunikatow());
+		watekOdbiorcy.start();
+
+		ramka.getContentPane().add(BorderLayout.CENTER, panelGlowny);
+		ramka.setSize(650, 400);
+		ramka.setVisible(true);
+
 	}
-	
-	
-	public class GraczeIlosc{
-		
-		JLabel polecenie;
-		JTextField informacja;
-		Frame ramka;
-		
-		
-		public void doDziela() {
-			JFrame ramka = new JFrame("Ilosc Graczy");
-			JPanel panelGlowny = new JPanel();
- 
- 
-			polecenie = new JLabel("Ilu Graczy?");
-			informacja = new JTextField(20);
 
-			JButton przyciskWyslij = new JButton("Wyslij");
-			przyciskWyslij.addActionListener(new PrzyciskWyslijListener());
+	public class PrzyciskWyslijListener implements ActionListener {
+		public void actionPerformed(ActionEvent ev) {
+			try {
+			 
+			 
+			 
+				pisarz.println(wiadomosc.getText());
+				pisarz.flush();
+			} catch (Exception ex) {
+				ex.printStackTrace();
+			}
 
-			panelGlowny.add(polecenie);
-			panelGlowny.add(informacja);
-			panelGlowny.add(przyciskWyslij);
+			 
+			wiadomosc.requestFocus();
+		 
+			 
 			 
 		 
-
-	 
-
-			ramka.getContentPane().add(BorderLayout.CENTER, panelGlowny);
-			ramka.setSize(400, 300);
-			ramka.setVisible(true);
-
 		}
-
-		public class PrzyciskWyslijListener implements ActionListener {
-			public void actionPerformed(ActionEvent ev) {
-	 
-
-				 iloscGraczy = Integer.parseInt(informacja.getText());
-				 repaint();
-
-			}
-		}
-
-		
-		
 	}
-	
-	// sprobuje zrobic klienta jako klase wew
-	// _______________________________________________________________________//
 
-	
+	private void konfigurujKomunikacje() {
+		try {
+			gniazdo = new Socket("127.0.0.1", 5000);
+			InputStreamReader czytelnikStrm = new InputStreamReader(
+					gniazdo.getInputStream());
+			czytelnik = new BufferedReader(czytelnikStrm);
+			pisarz = new PrintWriter(gniazdo.getOutputStream());
+			System.out.println("obsluga sieci gotowa");
+		} catch (IOException ex) {
+			ex.printStackTrace();
+
+		}
+	}
+//zajmij sie t¹ czescia aby odebrac dane pionkow
+	public class OdbiorcaKomunikatow implements Runnable {
+		public void run() {
+			//String wiadom;
+			try {
+				while ((wiadom = czytelnik.readLine()) != null) {
+					// System.out.println("Odczytano: " + wiadom);
+					odebraneWiadomosci.append(wiadom + "\n");
+					if(!wiadom.equals("podaj_nazwe")&&!wiadom.equals("polaczenie_udane"))
+					{
+						System.out.println("Mozna tworzyc plansze");
+						FlagaLogicznaDoPlanszy = true;
+						repaint();
+					}
+				 
+				}
+			} catch (Exception ex) {
+				ex.printStackTrace();
+			}
+			 
+		 
+			    
+		}
+
+	}
+
 	public class Piony {
-
- 
-	    
-	  
 		
 		
 		ArrayList<Point> punkty = new ArrayList<Point>();
@@ -695,125 +647,31 @@ public class Plansza extends JPanel
 	
 	
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	//---------------------------------------------------------------------------------//
+	public class RamkaPlanszy extends JFrame {
 
-	public class Klient {
-
-		JTextArea odebraneWiadomosci;
-		JTextField wiadomosc;
-		BufferedReader czytelnik;
-		PrintWriter pisarz;
-		Socket gniazdo;
-		Frame ramka;
-		String punktX;
-		String punktY;
-		String punktXprzed;
-		String punktYprzed;
-
-
-		public void doDziela() {
-			JFrame ramka = new JFrame("Klient Wiadomosci");
-			JPanel panelGlowny = new JPanel();
-
-			odebraneWiadomosci = new JTextArea(15, 50);
-			odebraneWiadomosci.setLineWrap(true);
-			odebraneWiadomosci.setWrapStyleWord(true);
-			odebraneWiadomosci.setEditable(false);
-
-			JScrollPane przewijanie = new JScrollPane(odebraneWiadomosci);
-			przewijanie.setVerticalScrollBarPolicy(
-					ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
-			przewijanie.setHorizontalScrollBarPolicy(
-					ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-
-			wiadomosc = new JTextField(20);
-
-			JButton przyciskWyslij = new JButton("Wyslij");
-			przyciskWyslij.addActionListener(new PrzyciskWyslijListener());
-
-			panelGlowny.add(przewijanie);
-			panelGlowny.add(wiadomosc);
-			panelGlowny.add(przyciskWyslij);
-			 
-			konfigurujKomunikacje();
-
-			Thread watekOdbiorcy = new Thread(new OdbiorcaKomunikatow());
-			watekOdbiorcy.start();
-
-			ramka.getContentPane().add(BorderLayout.CENTER, panelGlowny);
-			ramka.setSize(650, 400);
-			ramka.setVisible(true);
-
-		}
-
-		public class PrzyciskWyslijListener implements ActionListener {
-			public void actionPerformed(ActionEvent ev) {
-				try {
-				 
-				 
-				 
-					pisarz.println(wiadomosc.getText());
-					pisarz.flush();
-				} catch (Exception ex) {
-					ex.printStackTrace();
-				}
+		private static final long serialVersionUID = 1L;
 
 		 
-				wiadomosc.requestFocus();
-				 
-				 
+		 
+		
+		public RamkaPlanszy() {
+			super("Program obrazkowy");
+
 			 
-			}
-		}
+			
 
-		private void konfigurujKomunikacje() {
-			try {
-				gniazdo = new Socket("127.0.0.1", 5000);
-				InputStreamReader czytelnikStrm = new InputStreamReader(
-						gniazdo.getInputStream());
-				czytelnik = new BufferedReader(czytelnikStrm);
-				pisarz = new PrintWriter(gniazdo.getOutputStream());
-				System.out.println("obsluga sieci gotowa");
-			} catch (IOException ex) {
-				ex.printStackTrace();
+			add(new Klient2());
 
-			}
-		}
-//zajmij sie t¹ czescia aby odebrac dane pionkow
-		public class OdbiorcaKomunikatow implements Runnable {
-			public void run() {
-				//String wiadom;
-				try {
-					while ((wiadom = czytelnik.readLine()) != null) {
-						// System.out.println("Odczytano: " + wiadom);
-						odebraneWiadomosci.append(wiadom + "\n");
-						if(!wiadom.equals("podaj_nazwe")&&!wiadom.equals("polaczenie_udane"))
-						{
-							System.out.println("Mozna tworzyc plansze");
-							FlagaLogicznaDoPlanszy = true;
-					 
- 						 
-						}
-					 
-					}
-				} catch (Exception ex) {
-					ex.printStackTrace();
-				}
-				 
-			 
-				    
-			}
-
+			setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+			pack();
+			setVisible(true);
 		}
 
 	}
-
+	
+	
+	
 }
+
+	
+
