@@ -74,6 +74,8 @@ public class Plansza extends JPanel
 	int YdlaSerwera=0;
 	int XprzedRuchem=0;
 	int YprzedRuchem=0;
+	int Yzwrotne;
+	int Xzwrotne;
 	
 	String wiadom;//od serwera
 	ArrayList<String> ruchyZserwera2 = new ArrayList<String>();
@@ -162,6 +164,8 @@ public class Plansza extends JPanel
 	}
 
 	public void mousePressed(MouseEvent e) {
+		
+	 
 		int x = 0;
 		int y = 0;
 		x = e.getX();
@@ -199,7 +203,7 @@ public class Plansza extends JPanel
 		movingPoint = null;
 		XpoRuchu = e.getX();// te wspolrzedne beda wysylane do serwera
 		YpoRuchu = e.getY();
-		repaint();
+		 
 		// Klient wysylaj = new Klient();
 
 		NamaszczWspolrzedne( XpoRuchu, YpoRuchu);
@@ -208,6 +212,7 @@ public class Plansza extends JPanel
 		wysylaj.punktY = Integer.toString(YdlaSerwera);
 		wysylaj.punktXprzed = Integer.toString(XprzedRuchem);
 		wysylaj.punktYprzed = Integer.toString(YprzedRuchem);
+		wysylaj.wiadomosc.setText(wysylaj.punktXprzed+","+wysylaj.punktYprzed+","+wysylaj.punktX + "," + wysylaj.punktY);
 		 
 		//probuje naprawic
 
@@ -222,7 +227,7 @@ public class Plansza extends JPanel
 		//-----------------------------------------------------------
 		//ZASADNICZO NA DOBREJ DRODZE 
 
-	    TworcaGryDomyslnej tworca = new TworcaGryDomyslnej();
+	/*    TworcaGryDomyslnej tworca = new TworcaGryDomyslnej();
 
 		   try {
 			      tworca.zaladujGreZWiadomosci(wiadom);
@@ -247,13 +252,21 @@ public class Plansza extends JPanel
 	 //   int x = przykladowyPionek.podajX();
 	 //   int y = przykladowyPionek.podajY();
 	    
+	    
+	    punkty.clear();
 	    for( Zawodnik k : zawodnicy)
 	    {
 	    	
 	    	for(Pionek p : k.podajPionki())
 	    	{
-	    		System.out.println(p.podajX());
+	    		
+	    		NamaszczenieZwrotne(p.podajX(),p.podajY());
+	    		punkty.add(new Point(Xzwrotne,Yzwrotne)); 
+	    		  
+	    		System.out.println(p.podajX());//pomysl jak zrepaintowac
 	    		System.out.println(p.podajY());
+	    		System.out.println(Xzwrotne);
+	    		System.out.println(Yzwrotne);
 	    	}
 	    	
 	    }
@@ -264,8 +277,9 @@ public class Plansza extends JPanel
 	    System.out.println(wiadom);
 	    System.out.println(nazwaGracza);
 	    System.out.println(runda);
-		
-		
+	     */
+	    repaint();
+	     
 	}
 	public void mouseDragged(MouseEvent e) {
 		if (movingPoint != null) {
@@ -321,6 +335,86 @@ public class Plansza extends JPanel
 		}
 		
 	}
+	
+	public void NamaszczenieZwrotne(int wspX, int wspY)
+	{
+		
+		 
+		for(int i = 0; i<17; i++)
+		{
+			if(wspY==i)
+			{
+				Yzwrotne= 36 + 35*i;
+			}
+		}
+		
+		for(int k = 0; k<25; k++)
+		{
+			if(wspX==k )
+			{
+				Xzwrotne = 198 + k*20;
+			}
+		}
+	}
+	public void OperujSerwerem()
+	{
+		//-----------------------------------------------------------
+				//ZASADNICZO NA DOBREJ DRODZE 
+
+			    TworcaGryDomyslnej tworca = new TworcaGryDomyslnej();
+
+				   try {
+					      tworca.zaladujGreZWiadomosci(wiadom);
+					    } catch (NiepoprawnaWiadomosc e2) {}
+			    GraDomyslna gra = (GraDomyslna)tworca.stworzGre();
+			    
+			     
+			    String nazwaGracza;  
+			    int runda;  
+				
+				 
+				 //wciz czesc o ktorej rozmawialismy
+				
+				nazwaGracza = gra.podajKtoWykonujeRuch();
+			    runda = gra.podajRunde();
+			    //teraz czesc, z ktorej musze wymyslic jak rozkladac pionki przy pom serwera
+			    ArrayList<Zawodnik> zawodnicy = (ArrayList<Zawodnik>) gra.podajListeZawodnikow();
+			    
+			 //   Zawodnik przykladowyZawodnik = zawodnicy.get(0);
+			 //   ArrayList<Pionek> pionki = (ArrayList<Pionek>) przykladowyZawodnik.podajPionki();
+			 //   Pionek przykladowyPionek = pionki.get(0);
+			 //   int x = przykladowyPionek.podajX();
+			 //   int y = przykladowyPionek.podajY();
+			    
+			    
+			    punkty.clear();
+			    for( Zawodnik k : zawodnicy)
+			    {
+			    	
+			    	for(Pionek p : k.podajPionki())
+			    	{
+			    		
+			    		NamaszczenieZwrotne(p.podajX(),p.podajY());
+			    		punkty.add(new Point(Xzwrotne,Yzwrotne)); 
+			    		  
+			    		System.out.println(p.podajX());//pomysl jak zrepaintowac
+			    		System.out.println(p.podajY());
+			    		System.out.println(Xzwrotne);
+			    		System.out.println(Yzwrotne);
+			    	}
+			    	
+			    }
+			    
+			    
+			    
+			    //----------------------------------petla bedzie chyba potrzebna
+			    System.out.println(wiadom);
+			    System.out.println(nazwaGracza);
+			    System.out.println(runda);
+			    repaint();
+	}
+	
+	
 	//void odpowiedzialny za sprawdzanie przesuniec pionow
  
 	
@@ -441,13 +535,16 @@ public class Plansza extends JPanel
 		public class PrzyciskWyslijListener implements ActionListener {
 			public void actionPerformed(ActionEvent ev) {
 				try {
+				 
+				 
+				 
 					pisarz.println(wiadomosc.getText());
 					pisarz.flush();
 				} catch (Exception ex) {
 					ex.printStackTrace();
 				}
 
-				wiadomosc.setText(punktXprzed+","+punktYprzed+","+punktX + "," + punktY);
+				 
 				wiadomosc.requestFocus();
 
 			}
@@ -474,6 +571,7 @@ public class Plansza extends JPanel
 					while ((wiadom = czytelnik.readLine()) != null) {
 						// System.out.println("Odczytano: " + wiadom);
 						odebraneWiadomosci.append(wiadom + "\n");
+					 
 						 
 					}
 				} catch (Exception ex) {
