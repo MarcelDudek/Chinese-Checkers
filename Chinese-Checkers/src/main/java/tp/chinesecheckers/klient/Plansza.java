@@ -82,6 +82,10 @@ public class Plansza extends JPanel
 	ArrayList<String> ruchyZserwera2 = new ArrayList<String>();
 	String [] ruchyZserwera=null;
 	
+	  String nazwa;  
+	    int runda;  
+	
+	
 	GraczeIlosc ilu = new GraczeIlosc();
 	Klient wysylaj;
  
@@ -128,7 +132,8 @@ public class Plansza extends JPanel
 		if(FlagaLogicznaDoPlanszy == true)
 		{
 		OperujSerwerem();
-		
+		if(pionki.punkty.size()!=0)
+		{	
 		if (iloscGraczy == 2) {
 
 			pionki.Ustaw_pionki5(g2d);
@@ -140,9 +145,9 @@ public class Plansza extends JPanel
 		} else if (iloscGraczy == 4) {
 			pionki.Ustaw_pionki5(g2d);
 			pionki.Ustaw_pionki6(g2d);
-			pionki.Ustaw_pionki(g2d);// kolejnosc jest istotna w tych warunkach
+			 // kolejnosc jest istotna w tych warunkach
 			pionki.Ustaw_pionki3(g2d);// bazuja na ifach i petlach for z klasy
-										// piony
+			pionki.Ustaw_pionki(g2d);							// piony
 		} else if (iloscGraczy == 6) {
 			pionki.Ustaw_pionki(g2d);
 			pionki.Ustaw_pionki2(g2d);
@@ -152,7 +157,7 @@ public class Plansza extends JPanel
 			pionki.Ustaw_pionki6(g2d);
 
 		}
-	  
+		}
 
 	 
 			  
@@ -384,7 +389,8 @@ public class Plansza extends JPanel
 					    } catch (NiepoprawnaWiadomosc e2) {}
 			    GraDomyslna gra = (GraDomyslna)tworca.stworzGre();
 			    
-			     
+			    nazwa = gra.podajKtoWykonujeRuch();
+			    runda = gra.podajRunde();
 			 
 				 
 				 //wciz czesc o ktorej rozmawialismy
@@ -517,15 +523,15 @@ public class Plansza extends JPanel
 		 
 
 			int x1, y1;
-			if(IloscGraczy==4)
+			if(iloscGraczy==4)
 			{
-				for (int i = 20; i < 30; i++) {
+				for (int i = 30; i < 40; i++) {
 					x1 = (int) punkty.get(i).getX();
 					y1 = (int) punkty.get(i).getY();
 					g3d.fillOval(x1, y1, 25, 25);
 				}
 			}
-			else 
+			else  
 			{
 			for (int i = 0; i < 10; i++) {
 				x1 = (int) punkty.get(i).getX();
@@ -563,18 +569,18 @@ public class Plansza extends JPanel
 			int x1, y1;
 
 		 
-			 if(IloscGraczy==4)
+			 if(iloscGraczy==4)
 			{
 				
 
-				for (int i = 30; i < 40; i++) {
+				for (int i = 20; i < 30; i++) {
 					x1 = (int) punkty.get(i).getX();
 					y1 = (int) punkty.get(i).getY();
 					g3d.fillOval(x1, y1, 25, 25);
 				}
 				
 			}
-			else if(IloscGraczy==6)
+			else if(iloscGraczy==6)
 			{
 				for (int i = 20; i < 30; i++) {
 					x1 = (int) punkty.get(i).getX();
@@ -592,7 +598,7 @@ public class Plansza extends JPanel
 
 			int x1, y1;
 
-			if(IloscGraczy==3)
+			if(iloscGraczy==3)
 			{
 				for (int i = 10; i < 20; i++) {
 					x1 = (int) punkty.get(i).getX();
@@ -602,7 +608,7 @@ public class Plansza extends JPanel
 				
 			}
 		 
-			else if(IloscGraczy==6)
+			else if(iloscGraczy==6)
 			{
 			
 				for (int i = 30; i < 40; i++) {
@@ -620,7 +626,7 @@ public class Plansza extends JPanel
 
 			int x1, y1;
 
-			if(IloscGraczy==2)
+			if(iloscGraczy==2)
 			{
 				for (int i = 0; i < 10; i++) {
 					x1 = (int) punkty.get(i).getX();
@@ -628,7 +634,7 @@ public class Plansza extends JPanel
 					g3d.fillOval(x1, y1, 25, 25);
 				}
 			}
-			else if(IloscGraczy==3)
+			else if(iloscGraczy==3)
 			{
 				for (int i = 20; i < 30; i++) {
 					x1 = (int) punkty.get(i).getX();
@@ -636,7 +642,7 @@ public class Plansza extends JPanel
 					g3d.fillOval(x1, y1, 25, 25);
 				}
 			}
-			else if(IloscGraczy==4)
+			else if(iloscGraczy==4)
 			{
 
 				for (int i = 0; i < 10; i++) {
@@ -645,7 +651,7 @@ public class Plansza extends JPanel
 					g3d.fillOval(x1, y1, 25, 25);
 				}
 			}
-			else if(IloscGraczy==6)
+			else if(iloscGraczy==6)
 			{
 				for (int i = 40; i < 50; i++) {
 					x1 = (int) punkty.get(i).getX();
@@ -663,7 +669,7 @@ public class Plansza extends JPanel
 			 
 
 			int x1, y1;
-			if(IloscGraczy==2)
+			if(iloscGraczy==2)
 			{
 				for (int i = 10; i < 20; i++) {
 					x1 = (int) punkty.get(i).getX();
@@ -671,7 +677,7 @@ public class Plansza extends JPanel
 					g3d.fillOval(x1, y1, 25, 25);
 				}
 			}
-			else if(IloscGraczy==4)
+			else if(iloscGraczy==4)
 			{
 
 				for (int i = 10; i < 20; i++) {
@@ -680,7 +686,7 @@ public class Plansza extends JPanel
 					g3d.fillOval(x1, y1, 25, 25);
 				}
 			}
-			else if(IloscGraczy==6)
+			else if(iloscGraczy==6)
 			{
 				for (int i = 50; i < 60; i++) {
 					x1 = (int) punkty.get(i).getX();
@@ -801,14 +807,15 @@ public class Plansza extends JPanel
 				try {
 					while ((wiadom = czytelnik.readLine()) != null) {
 						// System.out.println("Odczytano: " + wiadom);
-						odebraneWiadomosci.append(wiadom + "\n");
-						if(!wiadom.equals("podaj_nazwe")&&!wiadom.equals("polaczenie_udane"))
+						odebraneWiadomosci.append(wiadom  + "\n" + "Ruch Gracza: " + nazwa + "; Runda: "+ runda + "\n");
+					//	 &&!wiadom.equals("polaczenie_udane")
+						if(!wiadom.equals("podaj_nazwe") )
 						{
 							System.out.println("Mozna tworzyc plansze");
 							FlagaLogicznaDoPlanszy = true;
-							  
+						}	  
  						 
-						}
+						 
 					 
 					}
 				} catch (Exception ex) {
