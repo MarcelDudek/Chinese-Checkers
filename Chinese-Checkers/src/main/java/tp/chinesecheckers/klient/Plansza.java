@@ -170,7 +170,7 @@ public class Plansza extends JPanel
 		;
 	}
 	public void mouseEntered(MouseEvent e) {
-		;
+		repaint();
 	}
 
 	public void mouseExited(MouseEvent e) {
@@ -306,7 +306,7 @@ public class Plansza extends JPanel
 		}
 	}
 	public void mouseMoved(MouseEvent e) {
-		;
+		repaint();
 	}
 
 	//stworzenie voida, ktory ma za zadanie zabezpieczac wspolrzedne ruchu, 
@@ -806,7 +806,7 @@ public class Plansza extends JPanel
 						{
 							System.out.println("Mozna tworzyc plansze");
 							FlagaLogicznaDoPlanszy = true;
-							 
+							  
  						 
 						}
 					 
