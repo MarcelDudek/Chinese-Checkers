@@ -285,6 +285,8 @@ public class GraDomyslnaSerwer extends GraDomyslna implements RozgrywkaSerwer {
       if (zawodnikRuch.podajNazwe().equals(nazwa)) {
         try {
           zawodnikRuch.przesunPionek(staryX, staryY, nowyX, nowyY);
+          System.out.println(zawodnikRuch.podajNazwe() + ": wykonano ruch " + staryX + ", " + staryY + " na "
+              + nowyX + ", " + nowyY);
           
           //Sprawdzenie czy zawodnik zakoñczy³ grê
           if (czyZawodnikZakonczylGre(zawodnikRuch)) {
@@ -458,7 +460,7 @@ public class GraDomyslnaSerwer extends GraDomyslna implements RozgrywkaSerwer {
      * dla pól gdzie mo¿liwe jest przeskoczenie innego piona.
      */
     if ((nowyY + 1 == staryY || nowyY - 1 == staryY)
-        && (nowyX + 1 == staryX || nowyX - 1 == staryY)) {
+        && (nowyX + 1 == staryX || nowyX - 1 == staryX)) {
       return true;
     }
     

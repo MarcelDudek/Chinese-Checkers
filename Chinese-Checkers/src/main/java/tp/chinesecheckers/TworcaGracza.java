@@ -129,35 +129,39 @@ public class TworcaGracza extends TworcaZawodnika {
         rozlozNaS(pozycjaX, pozycjaY, pionek);
         pozX = pozycjaX;
         pozY = pozycjaY + 16;
-        rozlozNaS(pozX, pozY, promien);
+        rozlozNaN(pozX, pozY, promien);
         break;
       case NW:
         pozX = pozycjaX - 3;
         pozY = pozycjaY - 3;
         rozlozNaS(pozX, pozY, pionek);
         pozX -= 18;
-        rozlozNaS(pozX, pozY, promien);
+        pozY -= 2;
+        rozlozNaN(pozX, pozY, promien);
         break;
       case NE:
         pozX = pozycjaX + 3;
         pozY = pozycjaY - 3;
         rozlozNaS(pozX, pozY, pionek);
         pozX += 18;
-        rozlozNaS(pozX, pozY, pionek);
+        pozY -= 2;
+        rozlozNaN(pozX, pozY, promien);
         break;
       case SW:
         pozX = pozycjaX - 3;
         pozY = pozycjaY + 3;
         rozlozNaN(pozX, pozY, pionek);
         pozX -= 18;
-        rozlozNaN(pozX, pozY, promien);
+        pozY += 2;
+        rozlozNaS(pozX, pozY, promien);
         break;
       case SE:
         pozX = pozycjaX + 3;
         pozY = pozycjaY + 3;
         rozlozNaN(pozX, pozY, pionek);
         pozX += 18;
-        rozlozNaN(pozX, pozY, promien);
+        pozY += 2;
+        rozlozNaS(pozX, pozY, promien);
         break;
       default:
         break;

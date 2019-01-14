@@ -46,7 +46,7 @@ public class TworcaBota extends TworcaZawodnika {
     
     //Dodanie promienia do bota
     Pionek prom;
-    for (int i = 0; i < pionek.size(); i++) {
+    for (int i = 0; i < promien.size(); i++) {
       prom = promien.get(i);
       bot.dodajPromien(prom.podajX(), prom.podajY());
     }
@@ -114,48 +114,52 @@ public class TworcaBota extends TworcaZawodnika {
     int pozY;
     
     switch (kierunek) {
-      case N:
-        rozlozNaN(pozycjaX, pozycjaY, pionek);
-        pozX = pozycjaX;
-        pozY = pozycjaY - 16;
-        rozlozNaS(pozX, pozY, promien);
-        break;
-      case S:
-        rozlozNaS(pozycjaX, pozycjaY, pionek);
-        pozX = pozycjaX;
-        pozY = pozycjaY + 16;
-        rozlozNaS(pozX, pozY, promien);
-        break;
-      case NW:
-        pozX = pozycjaX - 3;
-        pozY = pozycjaY - 3;
-        rozlozNaS(pozX, pozY, pionek);
-        pozX -= 18;
-        rozlozNaS(pozX, pozY, promien);
-        break;
-      case NE:
-        pozX = pozycjaX + 3;
-        pozY = pozycjaY - 3;
-        rozlozNaS(pozX, pozY, pionek);
-        pozX += 18;
-        rozlozNaS(pozX, pozY, pionek);
-        break;
-      case SW:
-        pozX = pozycjaX - 3;
-        pozY = pozycjaY + 3;
-        rozlozNaN(pozX, pozY, pionek);
-        pozX -= 18;
-        rozlozNaN(pozX, pozY, promien);
-        break;
-      case SE:
-        pozX = pozycjaX + 3;
-        pozY = pozycjaY + 3;
-        rozlozNaN(pozX, pozY, pionek);
-        pozX += 18;
-        rozlozNaN(pozX, pozY, promien);
-        break;
-      default:
-        break;
-    }
+    case N:
+      rozlozNaN(pozycjaX, pozycjaY, pionek);
+      pozX = pozycjaX;
+      pozY = pozycjaY - 16;
+      rozlozNaS(pozX, pozY, promien);
+      break;
+    case S:
+      rozlozNaS(pozycjaX, pozycjaY, pionek);
+      pozX = pozycjaX;
+      pozY = pozycjaY + 16;
+      rozlozNaN(pozX, pozY, promien);
+      break;
+    case NW:
+      pozX = pozycjaX - 3;
+      pozY = pozycjaY - 3;
+      rozlozNaS(pozX, pozY, pionek);
+      pozX -= 18;
+      pozY -= 2;
+      rozlozNaN(pozX, pozY, promien);
+      break;
+    case NE:
+      pozX = pozycjaX + 3;
+      pozY = pozycjaY - 3;
+      rozlozNaS(pozX, pozY, pionek);
+      pozX += 18;
+      pozY -= 2;
+      rozlozNaN(pozX, pozY, promien);
+      break;
+    case SW:
+      pozX = pozycjaX - 3;
+      pozY = pozycjaY + 3;
+      rozlozNaN(pozX, pozY, pionek);
+      pozX -= 18;
+      pozY += 2;
+      rozlozNaS(pozX, pozY, promien);
+      break;
+    case SE:
+      pozX = pozycjaX + 3;
+      pozY = pozycjaY + 3;
+      rozlozNaN(pozX, pozY, pionek);
+      pozX += 18;
+      pozY += 2;
+      rozlozNaS(pozX, pozY, promien);
+      break;
+    default:
+      break;
+  }
   }
 }
