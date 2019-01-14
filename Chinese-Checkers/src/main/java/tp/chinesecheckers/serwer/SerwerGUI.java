@@ -31,6 +31,7 @@ public class SerwerGUI {
   Serwer serwer = null;
   Thread thr = null;
   private JTextPane lista_graczy;
+  private JButton btnUruchomSerwer;
   
   /**
    * Launch the application.
@@ -79,7 +80,7 @@ public class SerwerGUI {
     frmChineseCheckersSerwer.getContentPane().add(textField_port);
     textField_port.setColumns(10);
     
-    JButton btnUruchomSerwer = new JButton("Uruchom serwer");
+    btnUruchomSerwer = new JButton("Uruchom serwer");
     btnUruchomSerwer.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent arg0) {
         int port = 0;
@@ -174,6 +175,9 @@ public class SerwerGUI {
       }
       lista_graczy.setText(tekst);
     }
+  }
+  public JButton getBtnUruchomSerwer() {
+    return btnUruchomSerwer;
   }
 }
 

@@ -17,7 +17,7 @@ public class TworcaGraczaTest {
     List<Pionek> promien = gracz.podajPromien();
     
     assertEquals("Test1", 3, pionek.get(0).podajX());
-    assertEquals("Test2", 7, pionek.get(0).podajY());
+    assertEquals("Test2", 9, pionek.get(0).podajY());
     
     assertEquals("Test promienia 1", 21, promien.get(0).podajX());
     assertEquals("Test promienia 2", 7, promien.get(0).podajY());
