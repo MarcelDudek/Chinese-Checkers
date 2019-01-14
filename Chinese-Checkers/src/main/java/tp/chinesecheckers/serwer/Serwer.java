@@ -139,9 +139,18 @@ public class Serwer implements Runnable {
       boolean wykonanoRuch = true;
       if (aktualnyRuchZawodnik.podajPozycje() == 0) {
         if (aktualnyRuchZawodnik instanceof Gracz) {
+          System.out.println("Runda gracza " + aktualnyRuchZawodnik.podajNazwe());
           wykonanoRuch = rozegrajRunde(aktualnyRuch);
         } else {
-          gra.wykonajRuchBota(aktualnyRuchZawodnik.podajNazwe());
+          System.out.println("Runda bota " + aktualnyRuchZawodnik.podajNazwe());
+          //Spij przez pol sekundy
+          try {
+            Thread.sleep(500);
+          } catch (InterruptedException e) {
+            e.printStackTrace();
+          }
+          //rozegraj runde
+          rozegrajRundeBota(aktualnyRuchZawodnik);
           wykonanoRuch = true;
         }
       }
@@ -203,6 +212,18 @@ public class Serwer implements Runnable {
     }
   }
   
+  private void rozegrajRundeBota(Zawodnik aktualnyBot) {
+    //wyslanie stanu gry
+    final String wiadomoscStanuGry =
+        gra.wygenerujWiadomosc(aktualnyBot.podajNazwe());
+    for (int i = 0; i < polaczenie.size(); i++) {
+      polaczenie.get(i).wyslijWiadomosc(wiadomoscStanuGry);
+    }
+    //wykonanie ruchu
+    gra.wykonajRuchBota(aktualnyBot.podajNazwe());
+    gra.ustawRunde(gra.podajRunde() + 1);
+  }
+  
   private boolean rozegrajRunde(final int aktualnyRuch) {
     //Podbicie licznika rund
     gra.ustawRunde(gra.podajRunde() + 1);
@@ -223,7 +244,7 @@ public class Serwer implements Runnable {
         Thread.sleep(1000);
         oczekiwanie++;
         //Je¿eli czekano 30 sekund, zamieñ gracza na bota
-        if (oczekiwanie == 30) {
+        if (oczekiwanie == 100) {
           gra.zamienGraczaNaBota(polRuch.podajNazwe());
           polRuch.zamknijPolaczenie();
           return false;
@@ -246,6 +267,7 @@ public class Serwer implements Runnable {
           Integer.parseInt(pozycja[1]), Integer.parseInt(pozycja[2]), Integer.parseInt(pozycja[3]));
     } catch (NiepoprawnyRuch ex) {
       System.err.println("Niepoprawny ruch.");
+      gra.ustawRunde(gra.podajRunde() - 1);
       wykonano = false;
     }
     
